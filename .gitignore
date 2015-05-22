@@ -1,0 +1,5 @@
+*.class
+*.jar
+*.lnk
+.DS_Store
+sources.txt
