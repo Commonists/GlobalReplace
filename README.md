@@ -1,5 +1,10 @@
-Apache Commons CLI
-===================
+# GlobalReplace
+Replaces file usage globally in the Wikimedia Wikifarm.
+
+This repository is looking for a maintainer. You look qualified :) Please give us a chance. Just you, this repo and Octocat.
+
+
+## Apache Commons CLI
 
 Welcome to the CLI 1.x component of the Apache Commons project.
 
