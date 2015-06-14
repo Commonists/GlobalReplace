@@ -1,4 +1,4 @@
-# GlobalReplace
+# GlobalReplace [![Build Status](https://travis-ci.org/Commonists/GlobalReplace.svg?branch=master)](https://travis-ci.org/Commonists/GlobalReplace)
 Replaces file usage globally in the Wikimedia Wikifarm.
 
 This repository is looking for a maintainer. You look qualified :) Please give us a chance. Just you, this repo and Octocat.
