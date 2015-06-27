@@ -9,7 +9,6 @@ import fbot.lib.core.auxi.Tuple;
 import fbot.lib.util.FGUI;
 import fbot.lib.util.WikiFile;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -24,9 +23,10 @@ import javax.swing.SwingUtilities;
 
 public class GlobalReplace {
     private static W wiki;
-    private static final String COMMONS_PAGE = "Commons:GlobalReplace";
+    private static final String NAME = "GlobalReplace";
+    private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final String VERSION = "v0.3.3";
+    private static final String VERSION = "v0.4";
     private static final String TITLE = "GlobalReplace " + VERSION;
     private static final JTextField OLD_TF;
     private static final JTextField NEW_TF;
@@ -157,6 +157,7 @@ public class GlobalReplace {
                 BAR.setMaximum(list.size());
                 String domain = null;
                 String text = null;
+                logReplacement(list.size());
                 for (int i = 0; i < list.size(); ++i) {
                     if (!this.updateStatus(i, list.get(i))) {
                         return;
@@ -180,6 +181,36 @@ public class GlobalReplace {
             }
             this.setTextFieldState(true);
             GlobalReplace.negateActivated();
+        }
+
+        /**
+         * Append the current replacement to the user's log page
+         * 
+         * @param size
+         *            the size of the replacement
+         */
+        private void logReplacement(int size) {
+            String currentYearAndMonth = wiki
+                    .expandtemplates("{{CURRENTYEAR}}/{{CURRENTMONTH}}");
+            String currentYear = currentYearAndMonth.split("/", 2)[0];
+            String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
+                    + currentYearAndMonth;
+            String logPageText = wiki.getPageText(logPage);
+            if (logPageText == null) {
+                // create new log page
+                logPageText = "A list of all replacements done by " + "[[User:"
+                        + wiki.whoami() + "|" + wiki.whoami() + "]] in "
+                        + currentYearAndMonth + " using " + "[[" + COMMONS_PAGE
+                        + "|" + NAME + "]].\n"
+                        + "[[Category:GlobalReplace Logs in " + currentYear
+                        + "]]" + "\n";
+            }
+            logPageText = logPageText + "\n* " + "[[:File:" + this.old_name
+                    + "]]"
+                    + " \u2192 " // \u2192 is unicode for →
+                    + "[[:File:" + this.new_name + "]] (" + size
+                    + " replacements at " + "{{subst:#time: F d}})";
+            wiki.edit(logPage, logPageText, "Updating log page via " + TITLE);
         }
 
         /**
