@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 public class GlobalReplace {
     private static W commonsWiki;
     private static final String SIGN_UP = "Commons:GlobalReplace/Sign-in";
-    private static final String VERSION = "v0.3.1";
+    private static final String VERSION = "v0.3.2";
     private static final String TITLE = "GlobalReplace " + VERSION;
     private static final JTextField OLD_TF;
     private static final JTextField NEW_TF;
