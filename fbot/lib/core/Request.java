@@ -11,14 +11,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.CookieManager;
-import java.net.CookieStore;
 import java.net.HttpCookie;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Request {
     private static final int connectTimeout = 60000;
@@ -45,8 +41,8 @@ public class Request {
 
     protected static Reply post(URL url, String text, CookieManager cookiejar, String contenttype) throws IOException {
         URLConnection c = url.openConnection();
-        c.setConnectTimeout(60000);
-        c.setReadTimeout(360000);
+        c.setConnectTimeout(connectTimeout);
+        c.setReadTimeout(readTimeout);
         Request.setCookies(c, cookiejar);
         if (contenttype != null) {
             c.setRequestProperty("Content-Type", contenttype);
@@ -64,8 +60,8 @@ public class Request {
         String boundary = "-----Boundary-----";
         URLConnection c = url.openConnection();
         c.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        c.setConnectTimeout(60000);
-        c.setReadTimeout(360000);
+        c.setConnectTimeout(connectTimeout);
+        c.setReadTimeout(readTimeout);
         Request.setCookies(c, cookiejar);
         c.setDoOutput(true);
         c.connect();
@@ -104,8 +100,8 @@ public class Request {
 
     protected static InputStream getInputStream(URL url, CookieManager cookiejar) throws IOException {
         URLConnection c = url.openConnection();
-        c.setConnectTimeout(60000);
-        c.setReadTimeout(360000);
+        c.setConnectTimeout(connectTimeout);
+        c.setReadTimeout(readTimeout);
         if (cookiejar != null) {
             Request.setCookies(c, cookiejar);
         }

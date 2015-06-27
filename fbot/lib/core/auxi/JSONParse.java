@@ -84,11 +84,10 @@ public class JSONParse
     if (x == null) {
       return null;
     }
-    String[] arrayOfString1;
-    int j = (arrayOfString1 = x).length;
+    int j = x.length;
     for (int i = 0; i < j; i++)
     {
-      String s = arrayOfString1[i];
+      String s = x[i];
       try
       {
         Object result = getR(jo.getJSONObject(s), key);

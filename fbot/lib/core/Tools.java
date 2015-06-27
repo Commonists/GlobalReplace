@@ -6,13 +6,17 @@ package fbot.lib.core;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class Tools {
+    /**
+     * Translate unsafe characters using UTF-8 encoding scheme
+     * @param s the text to encode
+     * @return
+     */
     public static String enc(String s) {
         try {
             return URLEncoder.encode(s, "UTF-8");

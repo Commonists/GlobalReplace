@@ -4,9 +4,7 @@
 package fbot.lib.core;
 
 import fbot.lib.core.Contrib;
-import fbot.lib.core.Credentials;
 import fbot.lib.core.ImageInfo;
-import fbot.lib.core.Namespace;
 import fbot.lib.core.Reply;
 import fbot.lib.core.Request;
 import fbot.lib.core.Revision;
@@ -16,14 +14,12 @@ import fbot.lib.core.Wiki;
 import fbot.lib.core.auxi.JSONParse;
 import fbot.lib.core.auxi.Logger;
 import fbot.lib.core.auxi.Tuple;
+
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.CookieManager;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -91,6 +87,12 @@ public class FQuery {
         return jl.toArray(new JSONObject[0]);
     }
 
+    /**
+     * Return the page text of the given page
+     * @param wiki the wiki to connect to
+     * @param title the title of the page to read the text from
+     * @return null or the page text
+     */
     public static String getPageText(Wiki wiki, String title) {
         Revision[] rl = FQuery.getRevisions(wiki, title, 1, false);
         return rl.length >= 1 && rl[0] != null ? rl[0].getText() : null;
@@ -188,6 +190,38 @@ public class FQuery {
             }
         }
         return r.getInt("size");
+    }
+    
+    /**
+     * Expand the specified wiki markup by passing it to the MediaWiki parser
+     * through the API.
+     * @param wiki the wiki to connect to
+     * @param text
+     *            the markup to expand
+     * @return the parsed markup as wikitext
+     */
+    public static String expandtemplates(Wiki wiki, String text) {
+        // This is a POST because markup can be arbitrarily large, as in the
+        // size of an article (over 10kb).
+        Logger.fyi("Expand templates: " + text);
+        URLBuilder ub = wiki.makeUB();
+        ub.setAction("expandtemplates");
+        ub.setParams("prop", "wikitext");
+        try {
+            Reply r = Request.post(ub.makeURL(),
+                    URLBuilder.chainParams("text", Tools.enc(text)),
+                    wiki.settings.cookiejar,
+                    "application/x-www-form-urlencoded");
+
+            if (!r.hasError()) {
+                return r.getString("wikitext");
+            } else {
+                return null;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String[] imageUsage(Wiki wiki, String file) {
@@ -308,5 +342,6 @@ public class FQuery {
         }
         return l;
     }
+
 }
 

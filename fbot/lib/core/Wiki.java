@@ -6,7 +6,6 @@ package fbot.lib.core;
 import fbot.lib.core.Credentials;
 import fbot.lib.core.Namespace;
 import fbot.lib.core.URLBuilder;
-import java.util.HashMap;
 
 public class Wiki {
     protected Credentials settings;
@@ -38,6 +37,7 @@ public class Wiki {
 
     /**
      * Return the user name of the currently logged in user
+     * 
      * @return
      */
     public String whoami() {
@@ -57,15 +57,20 @@ public class Wiki {
     }
 
     public String convertIfNotInNS(String title, String ns) {
-        return this.whichNS(title) == this.getNS(ns) ? title : String.format("%s:%s", ns, Namespace.nss(title));
+        return this.whichNS(title) == this.getNS(ns) ? title : String.format(
+                "%s:%s", ns, Namespace.nss(title));
     }
 
     public boolean isVerified(String domain) {
         return this.settings.cs_archive.containsKey(domain);
     }
 
+    /**
+     * Return a new URLBuilder with this wiki's domain
+     * 
+     * @return the URLBuilder
+     */
     protected URLBuilder makeUB() {
         return new URLBuilder(this.getCurrentDomain());
     }
 }
-

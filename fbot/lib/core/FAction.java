@@ -3,7 +3,6 @@
  */
 package fbot.lib.core;
 
-import fbot.lib.core.Credentials;
 import fbot.lib.core.FQuery;
 import fbot.lib.core.Namespace;
 import fbot.lib.core.Reply;
@@ -17,15 +16,10 @@ import fbot.lib.util.FError;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.CookieManager;
-import java.net.URL;
 import java.util.HashMap;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class FAction {
-    private static final int chunksize = 4194304;
+    private static final int CHUNKSIZE = 4194304;
 
     private FAction() {
     }
@@ -133,7 +127,7 @@ public class FAction {
             int i = 0;
             while ((long)i < chunks) {
                 Logger.log(String.format("(%s): Uploading chunk %d of %d", f.getName(), i + 1, chunks), "PURPLE");
-                l.put("offset", "" + i * 4194304);
+                l.put("offset", "" + i * CHUNKSIZE);
                 if (filekey != null) {
                     l.put("filekey", filekey);
                 }
@@ -157,7 +151,7 @@ public class FAction {
 
     private static String uploadChunk(HashMap<String, Object> l, Wiki wiki, URLBuilder ub, File f, FileInputStream in, int id) throws IOException {
         int remain = in.available();
-        byte[] chunk = remain > 4194304 ? new byte[4194304] : new byte[remain];
+        byte[] chunk = remain > CHUNKSIZE ? new byte[CHUNKSIZE] : new byte[remain];
         in.read(chunk);
         l.put("chunk\"; filename=\"" + f.getName(), chunk);
         Reply r = null;

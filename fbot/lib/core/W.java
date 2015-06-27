@@ -14,8 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class W
-extends Wiki {
+public class W extends Wiki {
     public W(String user, String px) {
         super(user, px);
     }
@@ -26,10 +25,14 @@ extends Wiki {
 
     /**
      * Replace the page text of the given wiki page
-     * @param title the title of the page
-     * @param text the text to post
-     * @param reason the reason for the edit
-     * @return if the edit succeeded 
+     * 
+     * @param title
+     *            the title of the page
+     * @param text
+     *            the text to post
+     * @param reason
+     *            the reason for the edit
+     * @return if the edit succeeded
      */
     public boolean edit(String title, String text, String reason) {
         return FAction.edit(this, title, text, reason);
@@ -47,6 +50,26 @@ extends Wiki {
         return FAction.purge(this, title);
     }
 
+    /**
+     * Expand the specified wiki markup by passing it to the MediaWiki parser
+     * through the API.
+     * 
+     * @param markup
+     *            the markup to expand
+     * 
+     * @return the parsed markup as wikitext
+     */
+    public String expandtemplates(String markup) {
+        return FQuery.expandtemplates(this, markup);
+    }
+
+    /**
+     * Return the page text of the given page
+     * 
+     * @param title
+     *            the title of the page to read the text from
+     * @return null or the page text
+     */
     public String getPageText(String title) {
         return FQuery.getPageText(this, title);
     }
@@ -71,27 +94,28 @@ extends Wiki {
         return FQuery.getCategorySize(this, title);
     }
 
-    public /* varargs */ String[] getCategoryMembers(String title, String ... ns) {
+    public/* varargs */String[] getCategoryMembers(String title, String... ns) {
         return this.getCategoryMembers(title, -1, ns);
     }
 
-    public /* varargs */ String[] getCategoryMembers(String title, int max, String ... ns) {
+    public/* varargs */String[] getCategoryMembers(String title, int max,
+            String... ns) {
         return FQuery.getCategoryMembers(this, title, max, ns);
     }
 
-    public /* varargs */ String[] getLinksOnPage(String title, String ... ns) {
+    public/* varargs */String[] getLinksOnPage(String title, String... ns) {
         return FQuery.getLinksOnPage(this, title, ns);
     }
 
-    public /* varargs */ String[] getValidLinksOnPage(String title, String ... ns) {
+    public/* varargs */String[] getValidLinksOnPage(String title, String... ns) {
         return this.exists(this.getLinksOnPage(title, ns), true);
     }
 
-    public /* varargs */ Contrib[] getContribs(String user, int max, String ... ns) {
+    public/* varargs */Contrib[] getContribs(String user, int max, String... ns) {
         return FQuery.getContribs(this, user, max, ns);
     }
 
-    public /* varargs */ Contrib[] getContribs(String user, String ... ns) {
+    public/* varargs */Contrib[] getContribs(String user, String... ns) {
         return this.getContribs(user, -1, ns);
     }
 
@@ -108,7 +132,8 @@ extends Wiki {
     }
 
     public boolean exists(String title) {
-        return (Boolean)this.exists((String[])new String[]{title}).get((int)0).y;
+        return (Boolean) this.exists((String[]) new String[] { title }).get(
+                (int) 0).y;
     }
 
     public List<Tuple<String, Boolean>> exists(String[] titles) {
@@ -118,8 +143,9 @@ extends Wiki {
     public String[] exists(String[] titles, boolean e) {
         ArrayList<String> l = new ArrayList<String>();
         for (Tuple<String, Boolean> t : this.exists(titles)) {
-            if ((Boolean)t.y ^ e) continue;
-            l.add((String)t.x);
+            if ((Boolean) t.y ^ e)
+                continue;
+            l.add((String) t.x);
         }
         return l.toArray(new String[0]);
     }
@@ -144,4 +170,3 @@ extends Wiki {
         return FQuery.globalUsage(this, title);
     }
 }
-
