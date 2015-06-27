@@ -24,7 +24,8 @@ import javax.swing.SwingUtilities;
 
 public class GlobalReplace {
     private static W wiki;
-    private static final String SIGN_UP = "Commons:GlobalReplace/Sign-in";
+    private static final String COMMONS_PAGE = "Commons:GlobalReplace";
+    private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
     private static final String VERSION = "v0.3.3";
     private static final String TITLE = "GlobalReplace " + VERSION;
     private static final JTextField OLD_TF;
@@ -32,6 +33,7 @@ public class GlobalReplace {
     private static final JTextField REASON_TF;
     private static final JProgressBar BAR;
     private static final JButton BUTTON;
+
     private static boolean activated;
 
     static {
@@ -111,13 +113,16 @@ public class GlobalReplace {
         private String old_name;
         private String new_name;
         private String reason;
-        private String regex;
+        private String old_name_regex;
+        private static final String[] SPECIAL_CHARS = new String[] { "(", ")",
+                "[", "]", "{", "}", "^", "-", "=", "$", "!", "|", "?", "*",
+                "+", ".", "<", ">" };
 
         private GRThread() {
             this.old_name = Namespace.nss(OLD_TF.getText()).trim();
             this.new_name = Namespace.nss(NEW_TF.getText()).trim();
             this.reason = REASON_TF.getText().trim().replace("%s", "%%s")
-                    + " ([[%sCommons:GlobalReplace|%s]])";
+                    + " ([[%s" + COMMONS_PAGE + "|%s]])";
             this.makeRegex();
         }
 
@@ -165,8 +170,9 @@ public class GlobalReplace {
                     Object[] arrobject = new Object[2];
                     arrobject[0] = domain.contains("commons") ? "" : "Commons:";
                     arrobject[1] = TITLE;
-                    wiki.edit(list.get(i).x,
-                            text.replaceAll(this.regex, this.new_name),
+                    wiki.edit(
+                            list.get(i).x,
+                            text.replaceAll(this.old_name_regex, this.new_name),
                             String.format(this.reason, arrobject));
                 }
                 BAR.setValue(list.size());
@@ -205,13 +211,17 @@ public class GlobalReplace {
             REASON_TF.setEditable(editable);
         }
 
+        /**
+         * Translate the old name into regex by escaping all special chars
+         */
         private void makeRegex() {
-            this.regex = this.old_name;
-            for (String s : new String[] { "(", ")", "[", "]", "{", "}", "^",
-                    "-", "=", "$", "!", "|", "?", "*", "+", ".", "<", ">" }) {
-                this.regex = this.regex.replace(s, ("\\" + s));
+            this.old_name_regex = this.old_name;
+            for (String s : SPECIAL_CHARS) {
+                this.old_name_regex = this.old_name_regex
+                        .replace(s, ("\\" + s));
             }
-            this.regex = this.regex.replaceAll("( |_)", "( |_)");
+            this.old_name_regex = this.old_name_regex.replaceAll("( |_)",
+                    "( |_)");
         }
 
         /**
@@ -229,10 +239,6 @@ public class GlobalReplace {
             return status;
         }
 
-        /*
-         * synthetic GRThread(GRThread gRThread) { GRThread gRThread2;
-         * gRThread2(); }
-         */
     }
 
 }
