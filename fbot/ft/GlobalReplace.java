@@ -26,7 +26,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final String VERSION = "v0.4";
+    private static final String VERSION = "v0.4.0"; // v{X}.{fix}.{minor}
     private static final String TITLE = "GlobalReplace " + VERSION;
     private static final JTextField OLD_TF;
     private static final JTextField NEW_TF;
@@ -200,7 +200,7 @@ public class GlobalReplace {
                 // create new log page
                 logPageText = "A list of all replacements done by " + "[[User:"
                         + wiki.whoami() + "|" + wiki.whoami() + "]] in "
-                        + currentYearAndMonth + " using " + "[[" + COMMONS_PAGE
+                        + "{{subst:#time: F Y}}" + " using " + "[[" + COMMONS_PAGE
                         + "|" + NAME + "]].\n"
                         + "[[Category:GlobalReplace Logs in " + currentYear
                         + "]]" + "\n";
