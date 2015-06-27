@@ -10,12 +10,10 @@ import fbot.lib.mbot.WAction;
 import fbot.lib.util.FError;
 import fbot.lib.util.ReadFile;
 import fbot.lib.util.WikiFile;
-import fbot.lib.util.WriteFile;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 

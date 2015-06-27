@@ -5,7 +5,6 @@ package fbot.ft;
 
 import fbot.ft.DRArchive;
 import fbot.lib.commons.Commons;
-import fbot.lib.core.W;
 import fbot.lib.mbot.MBot;
 import fbot.lib.mbot.WAction;
 import fbot.lib.util.FCLI;

@@ -5,10 +5,8 @@ package fbot.lib.util;
 
 import fbot.lib.core.W;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.LayoutManager;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -18,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 public class FGUI {
     private FGUI() {
@@ -51,6 +48,11 @@ public class FGUI {
         return pl;
     }
 
+    /**
+     * Create a confirm dialog to ask the user for username and password; Exit if the login fails three times; otherwise return the wiki
+     * @param domain the domain of the wiki
+     * @return the wiki
+     */
     public static W login(String domain) {
         JTextField tf = new JTextField(12);
         JPasswordField pf = new JPasswordField(12);
@@ -69,6 +71,10 @@ public class FGUI {
         return null;
     }
 
+    /**
+     * Create a confirm dialog to ask the user for their commons.wikimedia.org username and password; Exit if the login fails three times; otherwise return the wiki
+     * @return the commons wiki
+     */
     public static W login() {
         return FGUI.login("commons.wikimedia.org");
     }

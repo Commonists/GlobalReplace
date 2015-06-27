@@ -8,16 +8,15 @@ import fbot.lib.core.Reply;
 import fbot.lib.core.Request;
 import fbot.lib.core.URLBuilder;
 import fbot.lib.core.auxi.Logger;
+
 import java.net.CookieManager;
-import java.net.URL;
 import java.util.HashMap;
-import org.json.JSONObject;
 
 public class Credentials {
     protected String user;
     protected String px;
     protected final CookieManager cookiejar = new CookieManager();
-    protected final HashMap<String, CredStore> cs_archive = new HashMap();
+    protected final HashMap<String, CredStore> cs_archive = new HashMap<String, CredStore>();
     protected CredStore curr;
 
     protected Credentials(String user, String px) {

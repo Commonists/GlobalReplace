@@ -6,7 +6,6 @@ package fbot.lib.core;
 import fbot.lib.core.Constants;
 import fbot.lib.core.auxi.JSONParse;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import org.json.JSONArray;
