@@ -46,7 +46,7 @@ public class GlobalReplace {
     public static void main(String[] args) {
         wiki = FGUI.login();
         GlobalReplace.signup();
-        SwingUtilities.invokeLater(new Runnable(){
+        SwingUtilities.invokeLater(new Runnable() {
 
             @Override
             public void run() {
@@ -56,13 +56,13 @@ public class GlobalReplace {
     }
 
     private static void createAndShowGUI() {
-    	// Settings
-    	OLD_TF.setToolTipText("Use Ctrl+v or Command+v to paste text");
+        // Settings
+        OLD_TF.setToolTipText("Use Ctrl+v or Command+v to paste text");
         NEW_TF.setToolTipText("Use Ctrl+v or Command+v to paste text");
         REASON_TF.setToolTipText("Enter an optional edit summary");
         BAR.setStringPainted(true);
         BAR.setString(String.format("Hello, %s! :)", wiki.whoami()));
-        BUTTON.addActionListener(new ActionListener(){
+        BUTTON.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -72,13 +72,18 @@ public class GlobalReplace {
 
         // Create GUI
         JFrame f = FGUI.simpleJFrame(TITLE, 3, true);
-        f.getContentPane().add((Component)FGUI.buildForm("Replacement", new JLabel("Old Title: "), OLD_TF, new JLabel("New Title: "), NEW_TF, new JLabel("Summary: "), REASON_TF), "Center");
-        f.getContentPane().add((Component)FGUI.boxLayout(1, FGUI.simpleJPanel(BUTTON), BAR), "South");
+        f.getContentPane().add(
+                FGUI.buildForm("Replacement", new JLabel("Old Title: "),
+                        OLD_TF, new JLabel("New Title: "), NEW_TF, new JLabel(
+                                "Summary: "), REASON_TF), "Center");
+        f.getContentPane().add(
+                FGUI.boxLayout(1, FGUI.simpleJPanel(BUTTON), BAR), "South");
         FGUI.setJFrameVisible(f);
     }
 
     /**
-     * Sign up any new user of this tool; Do nothing if the user already signed up
+     * Sign up any new user of this tool; Do nothing if the user already signed
+     * up
      */
     private static void signup() {
         String text = wiki.getPageText(SIGN_UP);
@@ -86,12 +91,13 @@ public class GlobalReplace {
             return;
         }
         if (!text.contains(wiki.whoami())) {
-            boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#~~~~", "Signing up via "
-            		+ TITLE);
+            boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#~~~~",
+                    "Signing up via " + TITLE);
             if (!success) {
-                JOptionPane.showConfirmDialog(null, "You are not allowed to use this tool; Please request permission at "
-                		+ SIGN_UP
-                		+ ".  Program exiting","Missing permission",JOptionPane.OK_CANCEL_OPTION);
+                JOptionPane.showConfirmDialog(null,
+                        "You are not allowed to use this tool; Please request permission at "
+                                + SIGN_UP + ".  Program exiting",
+                        "Missing permission", JOptionPane.OK_CANCEL_OPTION);
                 System.exit(0);
             }
         }
@@ -101,8 +107,7 @@ public class GlobalReplace {
         activated = !activated;
     }
 
-    private static class GRThread
-    implements Runnable {
+    private static class GRThread implements Runnable {
         private String old_name;
         private String new_name;
         private String reason;
@@ -111,7 +116,8 @@ public class GlobalReplace {
         private GRThread() {
             this.old_name = Namespace.nss(OLD_TF.getText()).trim();
             this.new_name = Namespace.nss(NEW_TF.getText()).trim();
-            this.reason = REASON_TF.getText().trim().replace("%s", "%%s") + " ([[%sCommons:GlobalReplace|%s]])";
+            this.reason = REASON_TF.getText().trim().replace("%s", "%%s")
+                    + " ([[%sCommons:GlobalReplace|%s]])";
             this.makeRegex();
         }
 
@@ -136,10 +142,12 @@ public class GlobalReplace {
             BAR.setValue(0);
             BUTTON.setEnabled(false);
             this.setTextFieldState(false);
-            ArrayList<Tuple<String, String>> list = wiki.globalUsage("File:" + this.old_name);
+            ArrayList<Tuple<String, String>> list = wiki.globalUsage("File:"
+                    + this.old_name);
             BUTTON.setEnabled(true);
             if (list == null || list.size() == 0) {
-                BAR.setString(String.format("'%s' is not globally used", this.old_name));
+                BAR.setString(String.format("'%s' is not globally used",
+                        this.old_name));
             } else {
                 BAR.setMaximum(list.size());
                 String domain = null;
@@ -152,11 +160,14 @@ public class GlobalReplace {
                         domain = list.get(i).y;
                         wiki.switchDomain(domain);
                     }
-                    if ((text = wiki.getPageText(list.get(i).x)) == null) continue;
+                    if ((text = wiki.getPageText(list.get(i).x)) == null)
+                        continue;
                     Object[] arrobject = new Object[2];
                     arrobject[0] = domain.contains("commons") ? "" : "Commons:";
                     arrobject[1] = TITLE;
-                    wiki.edit(list.get(i).x, text.replaceAll(this.regex, this.new_name), String.format(this.reason, arrobject));
+                    wiki.edit(list.get(i).x,
+                            text.replaceAll(this.regex, this.new_name),
+                            String.format(this.reason, arrobject));
                 }
                 BAR.setValue(list.size());
                 BAR.setString("Done!");
@@ -167,8 +178,11 @@ public class GlobalReplace {
 
         /**
          * Check if the program is still activated and update the progress bar
-         * @param progress how much work was done already
-         * @param tuple the string tuple with ...
+         * 
+         * @param progress
+         *            how much work was done already
+         * @param tuple
+         *            the string tuple with ...
          * @return if the program is activated
          */
         private boolean updateStatus(int progress, Tuple<String, String> tuple) {
@@ -180,7 +194,8 @@ public class GlobalReplace {
                 return false;
             }
             BAR.setValue(progress);
-            BAR.setString(String.format("Edit %s @ %s (%d/%d)", tuple.x, tuple.y, progress + 1, BAR.getMaximum()));
+            BAR.setString(String.format("Edit %s @ %s (%d/%d)", tuple.x,
+                    tuple.y, progress + 1, BAR.getMaximum()));
             return true;
         }
 
@@ -192,29 +207,32 @@ public class GlobalReplace {
 
         private void makeRegex() {
             this.regex = this.old_name;
-            for (String s : new String[]{"(", ")", "[", "]", "{", "}", "^", "-", "=", "$", "!", "|", "?", "*", "+", ".", "<", ">"}) {
-                this.regex = this.regex.replace((CharSequence)s, (CharSequence)("\\" + s));
+            for (String s : new String[] { "(", ")", "[", "]", "{", "}", "^",
+                    "-", "=", "$", "!", "|", "?", "*", "+", ".", "<", ">" }) {
+                this.regex = this.regex.replace(s, ("\\" + s));
             }
             this.regex = this.regex.replaceAll("( |_)", "( |_)");
         }
 
         /**
-         * Check if old and new name are valid; Notify user if they are not 
+         * Check if old and new name are valid; Notify user if they are not
+         * 
          * @return if the names are valid
          */
         private boolean sanityCheck() {
-            boolean status = WikiFile.canUpload(this.old_name) && WikiFile.canUpload(this.new_name);
+            boolean status = WikiFile.canUpload(this.old_name)
+                    && WikiFile.canUpload(this.new_name);
             if (!status) {
-                JOptionPane.showMessageDialog(null, "You can only replace valid file names");
+                JOptionPane.showMessageDialog(null,
+                        "You can only replace valid file names");
             }
             return status;
         }
 
-        /* synthetic GRThread(GRThread gRThread) {
-            GRThread gRThread2;
-            gRThread2();
-        } */
+        /*
+         * synthetic GRThread(GRThread gRThread) { GRThread gRThread2;
+         * gRThread2(); }
+         */
     }
 
 }
-
