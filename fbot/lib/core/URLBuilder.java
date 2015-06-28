@@ -86,7 +86,7 @@ public class URLBuilder {
         this.clearAction();
     }
 
-    public static /* varargs */ String chainParams(String ... params) {
+    public static String chainParams(String ... params) {
         if (params.length % 2 == 1) {
             throw new UnsupportedOperationException("params contains an odd number of elements:" + params.length);
         }
@@ -97,7 +97,7 @@ public class URLBuilder {
         return x;
     }
 
-    public static /* varargs */ String chainProps(String ... props) {
+    public static String chainProps(String ... props) {
         String x = "";
         if (props.length >= 1) {
             x = String.valueOf(x) + props[0];

@@ -3,7 +3,7 @@
  */
 package fbot.lib.util;
 
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +21,7 @@ public class FGUI {
     private FGUI() {
     }
 
-    public static /* varargs */ JPanel buildForm(String title, JComponent ... cl) {
+    public static JPanel buildForm(String title, JComponent ... cl) {
         JPanel pl = new JPanel(new GridBagLayout());
         if (cl.length == 0 || cl.length % 2 == 1) {
             throw new UnsupportedOperationException("Either cl is empty or has an odd number of elements!");
@@ -53,29 +53,29 @@ public class FGUI {
      * @param domain the domain of the wiki
      * @return the wiki
      */
-    public static W login(String domain) {
+    public static WMFWiki login(String domain) {
         JTextField tf = new JTextField(12);
         JPasswordField pf = new JPasswordField(12);
         for (int i = 0; i < 3; ++i) {
-            W wiki;
+            WMFWiki wiki;
             if (JOptionPane.showConfirmDialog(null, FGUI.buildForm("Login", new JLabel("User: "), tf, new JLabel("Password: "), pf), "Login", 2, -1) != 0) {
                 System.exit(0);
             }
-            if ((wiki = new W(tf.getText().trim(), new String(pf.getPassword()), domain)).isVerified(domain)) {
+            if ((wiki = new WMFWiki(tf.getText().trim(), new String(pf.getPassword()), domain)).isVerified(domain)) {
                 return wiki;
             }
-            JOptionPane.showConfirmDialog(null, "User/Password not recognized. Try again?");
+            JOptionPane.showMessageDialog(null, "User/Password not recognized. Try again?", "Login error", JOptionPane.WARNING_MESSAGE);
         }
-        JOptionPane.showConfirmDialog(null, "Failed login 3 times.  Program exiting");
+        JOptionPane.showMessageDialog(null, "Failed login 3 times. Program exiting","Login failed", JOptionPane.ERROR_MESSAGE);
         System.exit(0);
         return null;
     }
 
     /**
-     * Create a confirm dialog to ask the user for their commons.wikimedia.org username and password; Exit if the login fails three times; otherwise return the wiki
+     * Create a confirm dialog to ask the user for their commons.wikimedia.org username and password; Exit if the login fails three times; otherwise return a commons wikimedia wiki
      * @return the commons wiki
      */
-    public static W login() {
+    public static WMFWiki login() {
         return FGUI.login("commons.wikimedia.org");
     }
 
@@ -93,7 +93,7 @@ public class FGUI {
         f.setVisible(true);
     }
 
-    public static /* varargs */ JPanel simpleJPanel(Component ... items) {
+    public static JPanel simpleJPanel(Component ... items) {
         JPanel p = new JPanel();
         for (Component c : items) {
             p.add(c);
@@ -101,7 +101,7 @@ public class FGUI {
         return p;
     }
 
-    public static /* varargs */ JPanel boxLayout(int axis, Component ... items) {
+    public static JPanel boxLayout(int axis, Component ... items) {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, axis));
         for (Component c : items) {

@@ -5,7 +5,7 @@ package fbot.lib.commons;
 
 import fbot.lib.commons.WikiGen;
 import fbot.lib.core.Contrib;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.MBot;
 import fbot.lib.mbot.WAction;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Commons {
-    public static final W com = WikiGen.generate("FSV");
+    public static final WMFWiki com = WikiGen.generate("FSV");
 
     private Commons() {
     }
@@ -55,7 +55,7 @@ public class Commons {
             l.add(new WAction(s, null, "File page with no file uploaded"){
 
                 @Override
-                public boolean doJob(W wiki) {
+                public boolean doJob(WMFWiki wiki) {
                     return wiki.getImageInfo(this.getTitle()) == null ? wiki.delete(this.getTitle(), this.summary) : true;
                 }
             });
@@ -69,7 +69,7 @@ public class Commons {
             l.add(new WAction(s, null, "Empty category"){
 
                 @Override
-                public boolean doJob(W wiki) {
+                public boolean doJob(WMFWiki wiki) {
                     return wiki.getCategorySize(this.getTitle()) <= 0 ? wiki.delete(this.getTitle(), this.summary) : true;
                 }
             });

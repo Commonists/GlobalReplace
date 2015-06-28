@@ -4,7 +4,7 @@
 package fbot.ft;
 
 import fbot.lib.commons.WikiGen;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.WAction;
 import fbot.lib.util.FError;
@@ -95,7 +95,7 @@ public class Up {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             return wiki.upload(this.f.getFile(), this.uploadTo, this.text, " ");
         }
 

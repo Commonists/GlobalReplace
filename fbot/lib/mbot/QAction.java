@@ -3,12 +3,11 @@
  */
 package fbot.lib.mbot;
 
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.core.auxi.Tuple;
 import fbot.lib.mbot.MAction;
 
-public abstract class QAction
-extends MAction {
+public abstract class QAction extends MAction {
     protected Tuple<String, ?> result;
 
     protected QAction(String title) {
@@ -20,6 +19,5 @@ extends MAction {
     }
 
     @Override
-    public abstract boolean doJob(W var1);
+    public abstract boolean doJob(WMFWiki var1);
 }
-

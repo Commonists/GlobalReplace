@@ -4,7 +4,7 @@
 package fbot.ft;
 
 import fbot.lib.core.Namespace;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.core.auxi.Tuple;
 import fbot.lib.util.FGUI;
 import fbot.lib.util.WikiFile;
@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class GlobalReplace {
-    private static W wiki;
+    private static WMFWiki wiki;
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
@@ -261,8 +261,8 @@ public class GlobalReplace {
          * @return if the names are valid
          */
         private boolean sanityCheck() {
-            boolean status = WikiFile.canUpload(this.old_name)
-                    && WikiFile.canUpload(this.new_name);
+            boolean status = WikiFile.hasAllowedFileExtension(this.old_name)
+                    && WikiFile.hasAllowedFileExtension(this.new_name);
             if (!status) {
                 JOptionPane.showMessageDialog(null,
                         "You can only replace valid file names");

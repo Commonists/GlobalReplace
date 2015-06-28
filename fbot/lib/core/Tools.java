@@ -27,7 +27,7 @@ public class Tools {
         }
     }
 
-    protected static /* varargs */ String[] massEnc(String ... strings) {
+    protected static String[] massEnc(String ... strings) {
         ArrayList<String> l = new ArrayList<String>();
         for (String s : strings) {
             l.add(Tools.enc(s));
@@ -58,7 +58,7 @@ public class Tools {
         return s.length() < 2 ? s.toUpperCase() : String.valueOf(s.substring(0, 1).toUpperCase()) + s.substring(1);
     }
 
-    public static /* varargs */ String fenceMaker(String post, String ... planks) {
+    public static String fenceMaker(String post, String ... planks) {
         if (planks.length == 0) {
             return "";
         }
@@ -69,7 +69,7 @@ public class Tools {
         return x;
     }
 
-    public static /* varargs */ String[][] splitStringArray(int max, String ... strings) {
+    public static String[][] splitStringArray(int max, String ... strings) {
         ArrayList<String[]> l = new ArrayList<String[]>();
         if (strings.length <= max) {
             return new String[][]{strings};
@@ -84,7 +84,7 @@ public class Tools {
         return (String[][])l.toArray(new String[0][]);
     }
 
-    protected static /* varargs */ HashMap<String, Object> makeParamMap(Object ... ol) {
+    protected static HashMap<String, Object> makeParamMap(Object ... ol) {
         HashMap<String, Object> l = new HashMap<String, Object>();
         if (ol.length % 2 == 1) {
             return null;

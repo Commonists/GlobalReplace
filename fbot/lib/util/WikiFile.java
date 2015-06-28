@@ -6,11 +6,12 @@ package fbot.lib.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class WikiFile {
+public class WikiFile { // TODO rename this is more like a java.io.File than
+                        // some on wiki file
+    private static final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)";
     private boolean isDirectory = false;
     private boolean isUploadable = false;
     private boolean exists = true;
@@ -22,7 +23,7 @@ public class WikiFile {
         this.name = f.getName();
         if (f.isDirectory()) {
             this.isDirectory = true;
-        } else if (f.isFile() && WikiFile.canUpload(this.name)) {
+        } else if (f.isFile() && WikiFile.hasAllowedFileExtension(this.name)) {
             this.isUploadable = true;
         } else {
             this.exists = false;
@@ -41,12 +42,14 @@ public class WikiFile {
         if (i == -1) {
             return "";
         }
-        return this.name.substring(this.name.lastIndexOf(46) + (useDot ? 0 : 1));
+        return this.name
+                .substring(this.name.lastIndexOf(46) + (useDot ? 0 : 1));
     }
 
     public String getName(boolean withExt) {
         if (!withExt) {
-            return this.name.contains((CharSequence)".") ? this.name.substring(0, this.name.lastIndexOf(46)) : this.name;
+            return this.name.contains((CharSequence) ".") ? this.name
+                    .substring(0, this.name.lastIndexOf(46)) : this.name;
         }
         return this.name;
     }
@@ -56,8 +59,7 @@ public class WikiFile {
     }
 
     /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
+     * Enabled force condition propagation Lifted jumps to return sites
      */
     public WikiFile[] listFiles(boolean canUploadOnly) {
         if (!this.isDirectory) {
@@ -66,13 +68,16 @@ public class WikiFile {
         ArrayList<WikiFile> fl = new ArrayList<WikiFile>();
         if (canUploadOnly) {
             for (File x : this.f.listFiles()) {
-                if (!x.isFile() || !WikiFile.canUpload(x.getName())) continue;
+                if (!x.isFile()
+                        || !WikiFile.hasAllowedFileExtension(x.getName()))
+                    continue;
                 fl.add(new WikiFile(x));
             }
             return fl.toArray(new WikiFile[0]);
         } else {
             for (File x : this.f.listFiles()) {
-                if (!x.isFile()) continue;
+                if (!x.isFile())
+                    continue;
                 fl.add(new WikiFile(x));
             }
         }
@@ -85,7 +90,8 @@ public class WikiFile {
         }
         ArrayList<WikiFile> wfl = new ArrayList<WikiFile>();
         for (File x : this.f.listFiles()) {
-            if (!x.isDirectory()) continue;
+            if (!x.isDirectory())
+                continue;
             wfl.add(new WikiFile(x));
         }
         return wfl.toArray(new WikiFile[0]);
@@ -132,8 +138,7 @@ public class WikiFile {
     public String getPath() {
         try {
             return this.f.getCanonicalPath();
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             return this.f.getAbsolutePath();
         }
     }
@@ -146,11 +151,18 @@ public class WikiFile {
         return this.getPath();
     }
 
-    public static boolean canUpload(String title) {
-        return title.matches("(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)");
+    /**
+     * Check if the title ends with any of the allowed file types
+     * 
+     * @param title
+     *            the title to check
+     * @return if the extension is an allowed one
+     */
+    public static boolean hasAllowedFileExtension(String title) {
+        return title.matches(ALLOWED_FILE_TYPES);
     }
 
-    public static /* varargs */ WikiFile[] convertTo(File ... files) {
+    public static WikiFile[] convertTo(File... files) {
         ArrayList<WikiFile> wfl = new ArrayList<WikiFile>();
         for (File f : files) {
             wfl.add(new WikiFile(f));
@@ -158,7 +170,7 @@ public class WikiFile {
         return wfl.toArray(new WikiFile[0]);
     }
 
-    public static /* varargs */ File[] convertFrom(WikiFile ... files) {
+    public static File[] convertFrom(WikiFile... files) {
         ArrayList<File> fl = new ArrayList<File>();
         for (WikiFile wf : files) {
             fl.add(wf.getFile());
@@ -166,4 +178,3 @@ public class WikiFile {
         return fl.toArray(new File[0]);
     }
 }
-

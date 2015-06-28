@@ -5,7 +5,7 @@ package fbot.ft;
 
 import fbot.lib.commons.Commons;
 import fbot.lib.commons.WikiGen;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.core.auxi.Logger;
 import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.MBot;
@@ -79,7 +79,7 @@ public class CC {
 
     private static class CCW
     extends WAction {
-        private static W ft = WikiGen.generate("Fastily");
+        private static WMFWiki ft = WikiGen.generate("Fastily");
         private WikiFile f;
 
         protected CCW(WikiFile f) {
@@ -88,7 +88,7 @@ public class CC {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             for (int i = 0; i < repeats; ++i) {
                 String fn = "File:" + FString.generateRandomFileName(this.f);
                 Logger.fyi(String.format("(%d/%d): Upload '%s' -> '%s'", i + 1, repeats, this.f, fn));

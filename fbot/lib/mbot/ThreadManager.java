@@ -3,23 +3,22 @@
  */
 package fbot.lib.mbot;
 
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.core.auxi.Logger;
 import fbot.lib.core.auxi.ProgressTracker;
 import fbot.lib.mbot.MAction;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ThreadManager {
-    private final ConcurrentLinkedQueue<MAction> todo = new ConcurrentLinkedQueue();
-    private final ConcurrentLinkedQueue<MAction> fails = new ConcurrentLinkedQueue();
+    private final ConcurrentLinkedQueue<MAction> todo = new ConcurrentLinkedQueue<MAction>();
+    private final ConcurrentLinkedQueue<MAction> fails = new ConcurrentLinkedQueue<MAction>();
     private final ProgressTracker pt;
-    private W wiki;
+    private WMFWiki wiki;
     private int num;
 
-    public ThreadManager(MAction[] ml, W wiki, int num) {
+    public ThreadManager(MAction[] ml, WMFWiki wiki, int num) {
         this.todo.addAll(Arrays.asList(ml));
         this.pt = new ProgressTracker(ml.length);
         this.wiki = wiki;
@@ -39,8 +38,7 @@ public class ThreadManager {
             try {
                 t.join();
                 continue;
-            }
-            catch (Throwable e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
@@ -50,8 +48,7 @@ public class ThreadManager {
         return this.fails.toArray(new MAction[0]);
     }
 
-    private static class Job
-    implements Runnable {
+    private static class Job implements Runnable {
         private ThreadManager m;
 
         protected Job(ThreadManager m) {
@@ -65,7 +62,7 @@ public class ThreadManager {
                 return;
             }
             String me = String.valueOf(Thread.currentThread().getName()) + ": ";
-            while ((curr = (MAction)this.m.todo.poll()) != null) {
+            while ((curr = (MAction) this.m.todo.poll()) != null) {
                 this.m.pt.inc(me);
                 if (!curr.doJob(this.m.wiki)) {
                     this.m.fails.add(curr);
@@ -78,4 +75,3 @@ public class ThreadManager {
     }
 
 }
-
