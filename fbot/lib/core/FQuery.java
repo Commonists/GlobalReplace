@@ -62,7 +62,7 @@ public class FQuery {
         return jl.toArray(new JSONObject[0]);
     }
 
-    protected static /* varargs */ JSONObject[] groupQuery(URLBuilder ub, String parentKey, Wiki wiki, String titlekey, String ... titles) {
+    protected static JSONObject[] groupQuery(URLBuilder ub, String parentKey, Wiki wiki, String titlekey, String ... titles) {
         ArrayList<JSONObject> jl = new ArrayList<JSONObject>();
         try {
             for (String[] tl : Tools.splitStringArray(20, titles)) {
@@ -119,7 +119,7 @@ public class FQuery {
         return rl.toArray(new Revision[0]);
     }
 
-    public static /* varargs */ String[] getCategoryMembers(Wiki wiki, String cat, int max, String ... ns) {
+    public static String[] getCategoryMembers(Wiki wiki, String cat, int max, String ... ns) {
         String title = wiki.whichNS(cat) == 0 ? String.format("%s:%s", wiki.getNS(14), cat) : cat;
         Logger.info("Fetching category members of " + title);
         URLBuilder ub = wiki.makeUB();
@@ -138,7 +138,7 @@ public class FQuery {
         return l.toArray(new String[0]);
     }
 
-    public static /* varargs */ String[] getLinksOnPage(Wiki wiki, String title, String ... ns) {
+    public static String[] getLinksOnPage(Wiki wiki, String title, String ... ns) {
         Logger.info("Fetching page links of " + title);
         URLBuilder ub = wiki.makeUB();
         ub.setAction("query");
@@ -157,7 +157,7 @@ public class FQuery {
         return l.toArray(new String[0]);
     }
 
-    public static /* varargs */ Contrib[] getContribs(Wiki wiki, String user, int max, String ... ns) {
+    public static Contrib[] getContribs(Wiki wiki, String user, int max, String ... ns) {
         Logger.info("Fetching contribs of " + user);
         URLBuilder ub = wiki.makeUB();
         ub.setAction("query");
@@ -259,7 +259,7 @@ public class FQuery {
         return l.toArray(new String[0]);
     }
 
-    public static /* varargs */ List<Tuple<String, Boolean>> exists(Wiki wiki, String ... titles) {
+    public static List<Tuple<String, Boolean>> exists(Wiki wiki, String ... titles) {
         Logger.info("Checking to see if some pages exist");
         URLBuilder ub = wiki.makeUB();
         ub.setAction("query");

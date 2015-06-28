@@ -5,7 +5,7 @@ package fbot.ft;
 
 import fbot.lib.commons.Commons;
 import fbot.lib.commons.WikiGen;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.MBot;
 import fbot.lib.mbot.QAction;
@@ -66,7 +66,7 @@ public class DRArchive {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             this.text = wiki.getPageText(this.getTitle());
             this.canArchive();
             if (!this.canA) {
@@ -85,7 +85,7 @@ public class DRArchive {
             }
         }
 
-        private void isSingleton(W wiki) {
+        private void isSingleton(WMFWiki wiki) {
             this.isSingle = this.text != null && !this.text.matches("(?si).*?\\{\\{(delh|DeletionHeader|DeletionFooter/Old|Delf|DeletionFooter|Udelf).*?\\}\\}.*?") && !this.text.matches(String.format("(?si).*?%s.*?%s.*?", stamp, stamp)) && wiki.getLinksOnPage(this.getTitle(), "File").length == 1;
         }
 
@@ -102,7 +102,7 @@ public class DRArchive {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             Commons.nukeLinksOnPage(this.getTitle(), this.summary, "File");
             this.text = wiki.getPageText(this.getTitle());
             return this.text != null ? wiki.edit(this.getTitle(), String.format("{{delh}}%n%s%n----%n'''Deleted''' -~~~~%n{{delf}}", this.text), "deleted") : false;
@@ -124,7 +124,7 @@ public class DRArchive {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             MAction[] l = this.fetchDRs(wiki);
             new MBot(wiki, 10).start(l);
             ArrayList<String> toArchive = new ArrayList<String>();
@@ -160,7 +160,7 @@ public class DRArchive {
             return x;
         }
 
-        private DRItem[] fetchDRs(W wiki) {
+        private DRItem[] fetchDRs(WMFWiki wiki) {
             ArrayList<DRItem> l = new ArrayList<DRItem>();
             for (String s : wiki.exists(wiki.getTemplatesOnPage(this.getTitle()), true)) {
                 if (!s.startsWith("Commons:Deletion requests/")) continue;

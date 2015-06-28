@@ -14,12 +14,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class W extends Wiki {
-    public W(String user, String px) {
+public class WMFWiki extends Wiki {
+    public WMFWiki(String user, String px) {
         super(user, px);
     }
 
-    public W(String user, String px, String domain) {
+    public WMFWiki(String user, String px, String domain) {
         super(user, px, domain);
     }
 
@@ -94,28 +94,27 @@ public class W extends Wiki {
         return FQuery.getCategorySize(this, title);
     }
 
-    public/* varargs */String[] getCategoryMembers(String title, String... ns) {
+    public String[] getCategoryMembers(String title, String... ns) {
         return this.getCategoryMembers(title, -1, ns);
     }
 
-    public/* varargs */String[] getCategoryMembers(String title, int max,
-            String... ns) {
+    public String[] getCategoryMembers(String title, int max, String... ns) {
         return FQuery.getCategoryMembers(this, title, max, ns);
     }
 
-    public/* varargs */String[] getLinksOnPage(String title, String... ns) {
+    public String[] getLinksOnPage(String title, String... ns) {
         return FQuery.getLinksOnPage(this, title, ns);
     }
 
-    public/* varargs */String[] getValidLinksOnPage(String title, String... ns) {
+    public String[] getValidLinksOnPage(String title, String... ns) {
         return this.exists(this.getLinksOnPage(title, ns), true);
     }
 
-    public/* varargs */Contrib[] getContribs(String user, int max, String... ns) {
+    public Contrib[] getContribs(String user, int max, String... ns) {
         return FQuery.getContribs(this, user, max, ns);
     }
 
-    public/* varargs */Contrib[] getContribs(String user, String... ns) {
+    public Contrib[] getContribs(String user, String... ns) {
         return this.getContribs(user, -1, ns);
     }
 

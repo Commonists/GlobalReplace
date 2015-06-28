@@ -6,7 +6,7 @@ package fbot.ft;
 import fbot.lib.commons.WikiGen;
 import fbot.lib.core.Namespace;
 import fbot.lib.core.Tools;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.core.auxi.Logger;
 import fbot.lib.core.auxi.Tuple;
 import fbot.lib.util.FError;
@@ -69,7 +69,7 @@ public class Relinker {
     }
 
     private static void process(ArrayList<Tuple<String, String>> l) {
-        W wiki = WikiGen.generate("FSV");
+        WMFWiki wiki = WikiGen.generate("FSV");
         String last = null;
         for (Tuple<String, String> t : l) {
             if (!((String)t.y).equals(last)) {

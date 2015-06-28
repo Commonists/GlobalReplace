@@ -9,15 +9,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FSystem {
-    public static final String lsep = System.getProperty("line.separator");
-    public static final String psep = File.separator;
-    public static final String home = System.getProperty("user.home");
+    public static final String LINE_SEP = System.getProperty("line.separator");
+    public static final String FILE_SEP = File.separator;
+    public static final String HOME_DIR = System.getProperty("user.home");
 
     private FSystem() {
     }
 
     public static boolean isWindows() {
-        return System.getProperty("os.name").contains((CharSequence)"Windows");
+        return System.getProperty("os.name").contains("Windows");
     }
 
     public static String getDefaultCharset() {
@@ -25,7 +25,7 @@ public class FSystem {
     }
 
     public static String getScriptHeader() {
-        return String.valueOf(FSystem.isWindows() ? "@echo off" : "#!/bin/bash\n") + lsep;
+        return FSystem.isWindows() ? "@echo off" : "#!/bin/bash\n" + LINE_SEP;
     }
 
     public static void copyFile(String src, String dest) throws IOException {
@@ -40,4 +40,3 @@ public class FSystem {
         out.close();
     }
 }
-

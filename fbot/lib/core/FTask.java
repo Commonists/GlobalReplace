@@ -3,17 +3,15 @@
  */
 package fbot.lib.core;
 
-import fbot.lib.core.Credentials;
 import fbot.lib.core.ImageInfo;
 import fbot.lib.core.Request;
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.CookieManager;
 import java.net.URL;
 import javax.imageio.ImageIO;
@@ -39,11 +37,11 @@ public class FTask {
         }
     }
 
-    public static boolean downloadFile(String title, String localpath, W wiki) {
+    public static boolean downloadFile(String title, String localpath, WMFWiki wiki) {
         return FTask.downloadFile(title, localpath, wiki, -1, -1);
     }
 
-    public static boolean downloadFile(String title, String localpath, W wiki, int height, int width) {
+    public static boolean downloadFile(String title, String localpath, WMFWiki wiki, int height, int width) {
         String url;
         ImageInfo x = wiki.getImageInfo(title, height, width);
         if (x.getThumbURL() != null) {
@@ -65,11 +63,11 @@ public class FTask {
         return true;
     }
 
-    public static BufferedImage downloadFile(String title, W wiki) throws IOException {
+    public static BufferedImage downloadFile(String title, WMFWiki wiki) throws IOException {
         return FTask.downloadFile(title, wiki, -1, -1);
     }
 
-    public static BufferedImage downloadFile(String title, W wiki, int height, int width) throws IOException {
+    public static BufferedImage downloadFile(String title, WMFWiki wiki, int height, int width) throws IOException {
         String url;
         ImageInfo x = wiki.getImageInfo(title, height, width);
         if (x.getThumbURL() != null) {

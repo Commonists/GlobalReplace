@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.Writer;
 
 public class WriteFile {
     private File f;
@@ -50,7 +49,7 @@ public class WriteFile {
                 return;
             }
             FileOutputStream out = new FileOutputStream(this.f, true);
-            out.write(this.b);
+            out.write(this.b); // TODO int or byte?
             out.close();
         } else if (this.overwrite) {
             PrintStream p = new PrintStream(this.f, FSystem.getDefaultCharset());

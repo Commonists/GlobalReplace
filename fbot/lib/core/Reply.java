@@ -41,7 +41,7 @@ public class Reply {
         return false;
     }
 
-    protected /* varargs */ boolean hasErrorIgnore(String ... codes) {
+    protected boolean hasErrorIgnore(String ... codes) {
         if (!this.hasError()) {
             return false;
         }

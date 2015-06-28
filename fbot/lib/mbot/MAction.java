@@ -3,7 +3,7 @@
  */
 package fbot.lib.mbot;
 
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import java.util.ArrayList;
 
 public abstract class MAction {
@@ -23,10 +23,11 @@ public abstract class MAction {
     }
 
     public String toString() {
-        return String.format("(title: %s | succeeded: %b)", this.title, this.succeeded);
+        return String.format("(title: %s | succeeded: %b)", this.title,
+                this.succeeded);
     }
 
-    public static /* varargs */ String[] convertToString(MAction ... actions) {
+    public static String[] convertToString(MAction... actions) {
         ArrayList<String> l = new ArrayList<String>();
         for (MAction m : actions) {
             l.add(m.title);
@@ -34,6 +35,5 @@ public abstract class MAction {
         return l.toArray(new String[0]);
     }
 
-    public abstract boolean doJob(W var1);
+    public abstract boolean doJob(WMFWiki var1);
 }
-

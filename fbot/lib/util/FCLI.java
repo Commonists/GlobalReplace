@@ -18,7 +18,7 @@ public class FCLI {
         return o;
     }
 
-    public static /* varargs */ OptionGroup makeOptGroup(Option ... ol) {
+    public static OptionGroup makeOptGroup(Option... ol) {
         OptionGroup og = new OptionGroup();
         for (Option o : ol) {
             og.addOption(o);
@@ -36,11 +36,9 @@ public class FCLI {
                 System.exit(0);
             }
             return l;
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             FError.errAndExit(e);
             return null;
         }
     }
 }
-

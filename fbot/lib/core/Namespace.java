@@ -4,12 +4,14 @@
 package fbot.lib.core;
 
 import fbot.lib.core.auxi.Tuple;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.json.JSONObject;
 
 public class Namespace {
-    private HashMap<Object, Tuple<Integer, String>> l = new HashMap();
+    private HashMap<Object, Tuple<Integer, String>> l = new HashMap<Object, Tuple<Integer, String>>();
 
     private Namespace() {
     }
@@ -59,7 +61,7 @@ public class Namespace {
         return "" + this.convert(prefix);
     }
 
-    protected /* varargs */ String[] prefixToNumStrings(String ... prefixes) {
+    protected String[] prefixToNumStrings(String ... prefixes) {
         ArrayList<String> l = new ArrayList<String>();
         for (String s : prefixes) {
             l.add(this.prefixToNumString(s));

@@ -3,7 +3,7 @@
  */
 package fbot.lib.mbot;
 
-import fbot.lib.core.W;
+import fbot.lib.core.WMFWiki;
 import fbot.lib.core.auxi.Logger;
 import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.ThreadManager;
@@ -11,14 +11,14 @@ import fbot.lib.mbot.WAction;
 import java.util.ArrayList;
 
 public class MBot {
-    private W wiki;
+    private WMFWiki wiki;
     private int num;
 
-    public MBot(W wiki) {
+    public MBot(WMFWiki wiki) {
         this(wiki, 20);
     }
 
-    public MBot(W wiki, int num) {
+    public MBot(WMFWiki wiki, int num) {
         this.wiki = wiki;
         this.num = num;
     }
@@ -42,7 +42,7 @@ public class MBot {
         return fails;
     }
 
-    public /* varargs */ MAction[] massDelete(String reason, String ... pages) {
+    public MAction[] massDelete(String reason, String ... pages) {
         ArrayList<DeleteItem> wl = new ArrayList<DeleteItem>();
         for (String s : pages) {
             wl.add(new DeleteItem(s, reason));
@@ -50,7 +50,7 @@ public class MBot {
         return this.start(wl.toArray(new DeleteItem[0]));
     }
 
-    public /* varargs */ MAction[] massEdit(String reason, String add, String replace, String replacement, String ... pages) {
+    public MAction[] massEdit(String reason, String add, String replace, String replacement, String ... pages) {
         ArrayList<EditItem> wl = new ArrayList<EditItem>();
         for (String s : pages) {
             wl.add(new EditItem(s, reason, add, replace, replacement));
@@ -65,7 +65,7 @@ public class MBot {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             return wiki.delete(this.getTitle(), this.summary);
         }
     }
@@ -84,7 +84,7 @@ public class MBot {
         }
 
         @Override
-        public boolean doJob(W wiki) {
+        public boolean doJob(WMFWiki wiki) {
             this.text = wiki.getPageText(this.getTitle());
             if (this.text == null) {
                 return false;

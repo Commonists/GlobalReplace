@@ -5,13 +5,14 @@ package fbot.lib.util;
 
 import fbot.lib.util.FError;
 import fbot.lib.util.FSystem;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class ReadFile {
-    private ArrayList<String> l = new ArrayList();
+    private ArrayList<String> l = new ArrayList<String>();
 
     public ReadFile(File f) {
         this(f, FSystem.getDefaultCharset());
@@ -51,7 +52,7 @@ public class ReadFile {
     public String getTextAsBlock() {
         String x = "";
         for (String s : this.l) {
-            x = String.valueOf(x) + s + FSystem.lsep;
+            x = String.valueOf(x) + s + FSystem.LINE_SEP;
         }
         return x;
     }
