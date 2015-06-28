@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -26,7 +27,9 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final String VERSION = "v0.4.0"; // v{X}.{fix}.{minor}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 5, 0 };// {X},{fix},{minor}
+    private static final String VERSION = "v" + VERSION_NUM[0] + "."
+            + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
     private static final JTextField OLD_TF;
     private static final JTextField NEW_TF;
@@ -47,6 +50,7 @@ public class GlobalReplace {
 
     public static void main(String[] args) {
         wiki = FGUI.login();
+        GlobalReplace.checkVersion();
         GlobalReplace.signup();
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -55,6 +59,41 @@ public class GlobalReplace {
                 GlobalReplace.createAndShowGUI();
             }
         });
+    }
+
+    /**
+     * Exit if the user is not running a stable version
+     */
+    private static void checkVersion() {
+        String versionText = wiki.getPageText(COMMONS_PAGE + "/MinimumVersion");
+        if (versionText == null) {
+            JOptionPane.showMessageDialog(null,
+                    "Could not check for updates. Program will stop!",
+                    "Update check failed", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+
+        String[] minVersion = versionText.substring(1).split("\\.", 3);
+
+        // get int representation of three bytes
+        int actualVersion = (VERSION_NUM[0] << 16) + (VERSION_NUM[1] << 8)
+                + VERSION_NUM[2];
+        int minimumVersion = (Byte.parseByte(minVersion[0]) << 16)
+                + (Byte.parseByte(minVersion[1]) << 8)
+                + Byte.parseByte(minVersion[2]);
+
+        if (minimumVersion <= actualVersion)
+            return;
+
+        JTextArea msg = new JTextArea("Current version: " + VERSION + "\n"
+                + "Please update the program to version " + versionText
+                + " or higher:" + "\n"
+                + "https://github.com/Commonists/GlobalReplace/releases/latest"
+                + "\n" + "Program will stop!");
+        msg.setFocusable(true);
+        JOptionPane.showMessageDialog(null, msg, "Outdated version",
+                JOptionPane.ERROR_MESSAGE);
+        System.exit(0);
     }
 
     private static void createAndShowGUI() {
@@ -200,8 +239,8 @@ public class GlobalReplace {
                 // create new log page
                 logPageText = "A list of all replacements done by " + "[[User:"
                         + wiki.whoami() + "|" + wiki.whoami() + "]] in "
-                        + "{{subst:#time: F Y}}" + " using " + "[[" + COMMONS_PAGE
-                        + "|" + NAME + "]].\n"
+                        + "{{subst:#time: F Y}}" + " using " + "[["
+                        + COMMONS_PAGE + "|" + NAME + "]].\n"
                         + "[[Category:GlobalReplace Logs in " + currentYear
                         + "]]" + "\n";
             }
