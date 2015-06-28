@@ -13,7 +13,7 @@ import fbot.lib.mbot.WAction;
 import fbot.lib.util.FCLI;
 import fbot.lib.util.FString;
 import fbot.lib.util.ReadFile;
-import fbot.lib.util.WikiFile;
+import fbot.lib.util.FFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -43,9 +43,9 @@ public class CC {
     }
 
     private static /* varargs */ CCW[] generateCCW(String ... paths) {
-        HashSet<WikiFile> sl = new HashSet<WikiFile>();
+        HashSet<FFile> sl = new HashSet<FFile>();
         for (String s : paths) {
-            WikiFile t = new WikiFile(s);
+            FFile t = new FFile(s);
             if (t.isDir()) {
                 sl.addAll(Arrays.asList(t.listFilesR(!nr)));
                 continue;
@@ -54,10 +54,10 @@ public class CC {
             sl.add(t);
         }
         if (sl.isEmpty()) {
-            sl.addAll(Arrays.asList(new WikiFile(".").listFilesR(!nr)));
+            sl.addAll(Arrays.asList(new FFile(".").listFilesR(!nr)));
         }
         ArrayList<CCW> x = new ArrayList<CCW>();
-        for (WikiFile f : sl) {
+        for (FFile f : sl) {
             x.add(new CCW(f));
         }
         return x.toArray(new CCW[0]);
@@ -80,9 +80,9 @@ public class CC {
     private static class CCW
     extends WAction {
         private static WMFWiki ft = WikiGen.generate("Fastily");
-        private WikiFile f;
+        private FFile f;
 
-        protected CCW(WikiFile f) {
+        protected CCW(FFile f) {
             super(f.getPath(), "Recreating [[bugzilla:36587]] (i.e. [[Special:UploadStash|upload stash]] bug) & collecting data to log.\n{{Warning|'''Test area only!  File may be non-free.''' This is just a test file and any license does not apply.}}\n[[Category:Fastily Test]]", "");
             this.f = f;
         }

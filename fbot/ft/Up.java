@@ -9,7 +9,7 @@ import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.WAction;
 import fbot.lib.util.FError;
 import fbot.lib.util.ReadFile;
-import fbot.lib.util.WikiFile;
+import fbot.lib.util.FFile;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class Up {
     public static void main(String[] args) throws InterruptedException {
         args = new String[]{"/Users/XXX/Desktop/Pacific Beach"};
         ArrayList<UploadItem> l = new ArrayList<UploadItem>();
-        for (WikiFile wf : Up.parseArgs(args)) {
+        for (FFile wf : Up.parseArgs(args)) {
             l.add(Up.genUI(wf));
         }
         String[] fails = MAction.convertToString(WikiGen.genM("Fastily", 1).start(l.toArray(new UploadItem[0])));
@@ -35,7 +35,7 @@ public class Up {
         }
     }
 
-    private static UploadItem genUI(WikiFile f) {
+    private static UploadItem genUI(FFile f) {
         String cat;
         String desc;
         String date = ddf.format(new Date(f.getFile().lastModified()));
@@ -54,7 +54,7 @@ public class Up {
         return new UploadItem(f, Up.genTitle(cat, f), String.format("=={{int:filedesc}}==\n{{Information\n|Description=%s\n|Source={{own}}\n|Date=%s\n|Author=~~~\n|Permission=\n|other_versions=\n}}\n\n=={{int:license-header}}==\n{{self|GFDL|cc-by-sa-3.0,2.5,2.0,1.0}}\n\n[[Category:%s]]\n[[Category:Files by Fastily]]", desc, date, cat));
     }
 
-    private static String genTitle(String cat, WikiFile f) {
+    private static String genTitle(String cat, FFile f) {
         int i = 1;
         if (tracker.containsKey(cat)) {
             i = tracker.get(cat) + 1;
@@ -65,10 +65,10 @@ public class Up {
         return String.format("%s %d %s.%s", cat, i, titledate, f.getExtension(false).toLowerCase());
     }
 
-    private static WikiFile[] parseArgs(String[] args) {
-        ArrayList<WikiFile> l = new ArrayList<WikiFile>();
+    private static FFile[] parseArgs(String[] args) {
+        ArrayList<FFile> l = new ArrayList<FFile>();
         for (String s : args) {
-            WikiFile w = new WikiFile(s);
+            FFile w = new FFile(s);
             if (w.isDir()) {
                 l.addAll(Arrays.asList(w.listFilesR(true)));
                 continue;
@@ -76,19 +76,19 @@ public class Up {
             if (!w.getExtension(false).matches("(?i)(txt)")) continue;
             l.clear();
             for (String x : new ReadFile(w.getFile()).getList()) {
-                l.add(new WikiFile(x));
+                l.add(new FFile(x));
             }
             break;
         }
-        return l.toArray(new WikiFile[0]);
+        return l.toArray(new FFile[0]);
     }
 
     private static class UploadItem
     extends WAction {
-        private WikiFile f;
+        private FFile f;
         private String uploadTo;
 
-        private UploadItem(WikiFile f, String title, String text) {
+        private UploadItem(FFile f, String title, String text) {
             super(f.getPath(), text, null);
             this.uploadTo = title;
             this.f = f;

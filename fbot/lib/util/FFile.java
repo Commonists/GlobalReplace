@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class WikiFile { // TODO rename this is more like a java.io.File than
-                        // some on wiki file
+public class FFile {
     private static final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)";
     private boolean isDirectory = false;
     private boolean isUploadable = false;
@@ -18,19 +17,19 @@ public class WikiFile { // TODO rename this is more like a java.io.File than
     private File f;
     private String name;
 
-    public WikiFile(File f) {
+    public FFile(File f) {
         this.f = f;
         this.name = f.getName();
         if (f.isDirectory()) {
             this.isDirectory = true;
-        } else if (f.isFile() && WikiFile.hasAllowedFileExtension(this.name)) {
+        } else if (f.isFile() && FFile.hasAllowedFileExtension(this.name)) {
             this.isUploadable = true;
         } else {
             this.exists = false;
         }
     }
 
-    public WikiFile(String s) {
+    public FFile(String s) {
         this(new File(s));
     }
 
@@ -58,69 +57,65 @@ public class WikiFile { // TODO rename this is more like a java.io.File than
         return this.f;
     }
 
-    /*
-     * Enabled force condition propagation Lifted jumps to return sites
-     */
-    public WikiFile[] listFiles(boolean canUploadOnly) {
+    public FFile[] listFiles(boolean canUploadOnly) {
         if (!this.isDirectory) {
             return null;
         }
-        ArrayList<WikiFile> fl = new ArrayList<WikiFile>();
+        ArrayList<FFile> fl = new ArrayList<FFile>();
         if (canUploadOnly) {
             for (File x : this.f.listFiles()) {
-                if (!x.isFile()
-                        || !WikiFile.hasAllowedFileExtension(x.getName()))
+                if (!x.isFile() || !FFile.hasAllowedFileExtension(x.getName()))
                     continue;
-                fl.add(new WikiFile(x));
+                fl.add(new FFile(x));
             }
-            return fl.toArray(new WikiFile[0]);
+            return fl.toArray(new FFile[0]);
         } else {
             for (File x : this.f.listFiles()) {
                 if (!x.isFile())
                     continue;
-                fl.add(new WikiFile(x));
+                fl.add(new FFile(x));
             }
         }
-        return fl.toArray(new WikiFile[0]);
+        return fl.toArray(new FFile[0]);
     }
 
-    public WikiFile[] listDirs() {
+    public FFile[] listDirs() {
         if (!this.isDirectory) {
             return null;
         }
-        ArrayList<WikiFile> wfl = new ArrayList<WikiFile>();
+        ArrayList<FFile> wfl = new ArrayList<FFile>();
         for (File x : this.f.listFiles()) {
             if (!x.isDirectory())
                 continue;
-            wfl.add(new WikiFile(x));
+            wfl.add(new FFile(x));
         }
-        return wfl.toArray(new WikiFile[0]);
+        return wfl.toArray(new FFile[0]);
     }
 
-    public WikiFile[] listFilesR(boolean canUploadOnly) {
+    public FFile[] listFilesR(boolean canUploadOnly) {
         if (!this.isDirectory) {
             return null;
         }
-        ArrayList<WikiFile> wfl = new ArrayList<WikiFile>();
+        ArrayList<FFile> wfl = new ArrayList<FFile>();
         wfl.addAll(Arrays.asList(this.listFiles(canUploadOnly)));
-        for (WikiFile dir : this.listDirs()) {
+        for (FFile dir : this.listDirs()) {
             wfl.addAll(Arrays.asList(dir.listFilesR(canUploadOnly)));
         }
-        return wfl.toArray(new WikiFile[0]);
+        return wfl.toArray(new FFile[0]);
     }
 
-    public WikiFile[] listDirsR() {
+    public FFile[] listDirsR() {
         if (!this.isDirectory) {
             return null;
         }
-        HashSet<WikiFile> dl = new HashSet<WikiFile>();
-        List<WikiFile> dirs = Arrays.asList(this.listDirs());
+        HashSet<FFile> dl = new HashSet<FFile>();
+        List<FFile> dirs = Arrays.asList(this.listDirs());
         Arrays.asList(this.listDirs());
-        for (WikiFile d : dirs) {
+        for (FFile d : dirs) {
             dl.addAll(Arrays.asList(d.listDirsR()));
         }
         dl.addAll(dirs);
-        return dl.toArray(new WikiFile[0]);
+        return dl.toArray(new FFile[0]);
     }
 
     public boolean isDir() {
@@ -162,17 +157,17 @@ public class WikiFile { // TODO rename this is more like a java.io.File than
         return title.matches(ALLOWED_FILE_TYPES);
     }
 
-    public static WikiFile[] convertTo(File... files) {
-        ArrayList<WikiFile> wfl = new ArrayList<WikiFile>();
+    public static FFile[] convertTo(File... files) {
+        ArrayList<FFile> wfl = new ArrayList<FFile>();
         for (File f : files) {
-            wfl.add(new WikiFile(f));
+            wfl.add(new FFile(f));
         }
-        return wfl.toArray(new WikiFile[0]);
+        return wfl.toArray(new FFile[0]);
     }
 
-    public static File[] convertFrom(WikiFile... files) {
+    public static File[] convertFrom(FFile... files) {
         ArrayList<File> fl = new ArrayList<File>();
-        for (WikiFile wf : files) {
+        for (FFile wf : files) {
             fl.add(wf.getFile());
         }
         return fl.toArray(new File[0]);

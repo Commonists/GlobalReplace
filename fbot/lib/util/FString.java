@@ -4,7 +4,7 @@
 package fbot.lib.util;
 
 import fbot.lib.util.FSystem;
-import fbot.lib.util.WikiFile;
+import fbot.lib.util.FFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -17,7 +17,7 @@ public class FString {
                 .toUpperCase()) + s.substring(1);
     }
 
-    public static String generateRandomFileName(WikiFile file) {
+    public static String generateRandomFileName(FFile file) {
         return String.format("%#o x %s.%s", r.nextInt(255),
                 new SimpleDateFormat("HH.mm.ss").format(new Date()),
                 file.getExtension(false));
