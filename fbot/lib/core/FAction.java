@@ -30,6 +30,14 @@ public class FAction {
     private FAction() {
     }
 
+    /**
+     * Replace the page text of the given wiki page
+     * @param wiki the wiki to connect to
+     * @param title the title of the page
+     * @param text the text to post
+     * @param reason the reason for the edit
+     * @return if the edit succeeded 
+     */
     public static boolean edit(Wiki wiki, String title, String text, String reason) {
         Logger.info("Editing " + title);
         URLBuilder ub = wiki.makeUB();

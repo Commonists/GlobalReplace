@@ -5,7 +5,6 @@ package fbot.lib.commons;
 
 import fbot.lib.commons.WikiGen;
 import fbot.lib.core.Contrib;
-import fbot.lib.core.ImageInfo;
 import fbot.lib.core.W;
 import fbot.lib.mbot.MAction;
 import fbot.lib.mbot.MBot;
@@ -13,7 +12,6 @@ import fbot.lib.mbot.WAction;
 import fbot.lib.util.ReadFile;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 public class Commons {
     public static final W com = WikiGen.generate("FSV");

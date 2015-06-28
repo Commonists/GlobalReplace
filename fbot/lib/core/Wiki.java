@@ -36,6 +36,10 @@ public class Wiki {
         return this.settings.curr.nsl;
     }
 
+    /**
+     * Return the user name of the currently logged in user
+     * @return
+     */
     public String whoami() {
         return this.settings.user;
     }

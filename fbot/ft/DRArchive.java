@@ -11,13 +11,15 @@ import fbot.lib.mbot.MBot;
 import fbot.lib.mbot.QAction;
 import fbot.lib.mbot.WAction;
 import fbot.lib.util.FCLI;
+
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
 public class DRArchive {
-    private static ConcurrentLinkedQueue<String> singles = new ConcurrentLinkedQueue();
+    private static ConcurrentLinkedQueue<String> singles = new ConcurrentLinkedQueue<String>();
     private static final String stamp = "\\d{2}?:\\d{2}?, \\d{1,}? (January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}?";
 
     public static void main(String[] args) {
@@ -84,7 +86,7 @@ public class DRArchive {
         }
 
         private void isSingleton(W wiki) {
-            this.isSingle = this.text != null && !this.text.matches("(?si).*?\\{\\{(delh|DeletionHeader|DeletionFooter/Old|Delf|DeletionFooter|Udelf).*?\\}\\}.*?") && !this.text.matches(String.format("(?si).*?%s.*?%s.*?", "\\d{2}?:\\d{2}?, \\d{1,}? (January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}?", "\\d{2}?:\\d{2}?, \\d{1,}? (January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}?")) && wiki.getLinksOnPage(this.getTitle(), "File").length == 1;
+            this.isSingle = this.text != null && !this.text.matches("(?si).*?\\{\\{(delh|DeletionHeader|DeletionFooter/Old|Delf|DeletionFooter|Udelf).*?\\}\\}.*?") && !this.text.matches(String.format("(?si).*?%s.*?%s.*?", stamp, stamp)) && wiki.getLinksOnPage(this.getTitle(), "File").length == 1;
         }
 
         /* synthetic DRItem(String string, DRItem dRItem) {

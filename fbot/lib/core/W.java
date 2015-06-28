@@ -24,6 +24,13 @@ extends Wiki {
         super(user, px, domain);
     }
 
+    /**
+     * Replace the page text of the given wiki page
+     * @param title the title of the page
+     * @param text the text to post
+     * @param reason the reason for the edit
+     * @return if the edit succeeded 
+     */
     public boolean edit(String title, String text, String reason) {
         return FAction.edit(this, title, text, reason);
     }

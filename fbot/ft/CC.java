@@ -14,13 +14,10 @@ import fbot.lib.util.FCLI;
 import fbot.lib.util.FString;
 import fbot.lib.util.ReadFile;
 import fbot.lib.util.WikiFile;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 

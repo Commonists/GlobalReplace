@@ -8,11 +8,12 @@ import fbot.lib.core.W;
 import fbot.lib.core.auxi.Tuple;
 import fbot.lib.util.FGUI;
 import fbot.lib.util.WikiFile;
+
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,29 +23,29 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class GlobalReplace {
-    private static W wiki;
-    private static final String signin = "Commons:GlobalReplace/Sign-in";
-    private static final String title = "GlobalReplace v0.3";
-    private static final JTextField old_tf;
-    private static final JTextField new_tf;
-    private static final JTextField r_tf;
-    private static final JProgressBar bar;
-    private static final JButton button;
+    private static W commonsWiki;
+    private static final String SIGN_UP = "Commons:GlobalReplace/Sign-in";
+    private static final String VERSION = "v0.3.2";
+    private static final String TITLE = "GlobalReplace " + VERSION;
+    private static final JTextField OLD_TF;
+    private static final JTextField NEW_TF;
+    private static final JTextField REASON_TF;
+    private static final JProgressBar BAR;
+    private static final JButton BUTTON;
     private static boolean activated;
 
     static {
-        old_tf = new JTextField(30);
-        new_tf = new JTextField(30);
-        r_tf = new JTextField(30);
-        bar = new JProgressBar(0, 100);
-        button = new JButton("Start/Stop");
+        OLD_TF = new JTextField(30);
+        NEW_TF = new JTextField(30);
+        REASON_TF = new JTextField(30);
+        BAR = new JProgressBar(0, 100);
+        BUTTON = new JButton("Start/Stop");
         activated = false;
     }
 
     public static void main(String[] args) {
-        wiki = FGUI.login();
-        GlobalReplace.signin();
-        GlobalReplace.randomSettings();
+        commonsWiki = FGUI.login();
+        GlobalReplace.signup();
         SwingUtilities.invokeLater(new Runnable(){
 
             @Override
@@ -55,34 +56,44 @@ public class GlobalReplace {
     }
 
     private static void createAndShowGUI() {
-        JFrame f = FGUI.simpleJFrame("GlobalReplace v0.3", 3, true);
-        f.getContentPane().add((Component)FGUI.buildForm("GlobalReplace v0.3", new JLabel("Old Title: "), old_tf, new JLabel("New Title: "), new_tf, new JLabel("Summary: "), r_tf), "Center");
-        f.getContentPane().add((Component)FGUI.boxLayout(1, FGUI.simpleJPanel(button), bar), "South");
-        FGUI.setJFrameVisible(f);
-    }
-
-    private static void randomSettings() {
-        old_tf.setToolTipText("Hint: Use Ctrl+v or Command+v to paste text");
-        new_tf.setToolTipText("Hint: Use Ctrl+v or Command+v to paste text");
-        r_tf.setToolTipText("Hint: Enter an optional edit summary");
-        bar.setStringPainted(true);
-        bar.setString(String.format("Hello, %s! :)", wiki.whoami()));
-        button.addActionListener(new ActionListener(){
+    	// Settings
+    	OLD_TF.setToolTipText("Hint: Use Ctrl+v or Command+v to paste text");
+        NEW_TF.setToolTipText("Hint: Use Ctrl+v or Command+v to paste text");
+        REASON_TF.setToolTipText("Hint: Enter an optional edit summary");
+        BAR.setStringPainted(true);
+        BAR.setString(String.format("Hello, %s! :)", commonsWiki.whoami()));
+        BUTTON.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 new Thread(new GRThread()).start();
             }
         });
+
+        // Create GUI
+        JFrame f = FGUI.simpleJFrame(TITLE, 3, true);
+        f.getContentPane().add((Component)FGUI.buildForm(TITLE, new JLabel("Old Title: "), OLD_TF, new JLabel("New Title: "), NEW_TF, new JLabel("Summary: "), REASON_TF), "Center");
+        f.getContentPane().add((Component)FGUI.boxLayout(1, FGUI.simpleJPanel(BUTTON), BAR), "South");
+        FGUI.setJFrameVisible(f);
     }
 
-    private static void signin() {
-        String text = wiki.getPageText("Commons:GlobalReplace/Sign-in");
+    /**
+     * Sign up any new user of this tool; Do nothing if the user already signed up
+     */
+    private static void signup() {
+        String text = commonsWiki.getPageText(SIGN_UP);
         if (text == null) {
             return;
         }
-        if (!text.contains((CharSequence)wiki.whoami())) {
-            wiki.edit("Commons:GlobalReplace/Sign-in", String.valueOf(text.trim()) + "\n#~~~~", "Signing in");
+        if (!text.contains(commonsWiki.whoami())) {
+            boolean success = commonsWiki.edit(SIGN_UP, String.valueOf(text.trim()) + "\n#~~~~", "Signing up via "
+            		+ TITLE);
+            if (!success) {
+                JOptionPane.showConfirmDialog(null, "You are not allowed to use this tool; Please request permission at "
+                		+ SIGN_UP
+                		+ ".  Program exiting","Missing permission",JOptionPane.OK_CANCEL_OPTION);
+                System.exit(0);
+            }
         }
     }
 
@@ -98,9 +109,9 @@ public class GlobalReplace {
         private String regex;
 
         private GRThread() {
-            this.old_name = Namespace.nss(old_tf.getText()).trim();
-            this.new_name = Namespace.nss(new_tf.getText()).trim();
-            this.reason = String.valueOf(r_tf.getText().trim().replace((CharSequence)"%s", (CharSequence)"%%s")) + " ([[%sCommons:GlobalReplace|%s]])";
+            this.old_name = Namespace.nss(OLD_TF.getText()).trim();
+            this.new_name = Namespace.nss(NEW_TF.getText()).trim();
+            this.reason = String.valueOf(REASON_TF.getText().trim().replace((CharSequence)"%s", (CharSequence)"%%s")) + " ([[%sCommons:GlobalReplace|%s]])";
             this.makeRegex();
         }
 
@@ -110,27 +121,27 @@ public class GlobalReplace {
                 if (!this.sanityCheck()) {
                     return;
                 }
-                button.setText("Stop");
+                BUTTON.setText("Stop");
                 GlobalReplace.negateActivated();
                 this.doJob();
-                wiki.switchDomain("commons.wikimedia.org");
-                button.setText("Start");
+                commonsWiki.switchDomain("commons.wikimedia.org");
+                BUTTON.setText("Start");
             } else {
-                button.setEnabled(false);
+                BUTTON.setEnabled(false);
                 GlobalReplace.negateActivated();
             }
         }
 
         private void doJob() {
-            bar.setValue(0);
-            button.setEnabled(false);
+            BAR.setValue(0);
+            BUTTON.setEnabled(false);
             this.setTextFieldState(false);
-            ArrayList<Tuple<String, String>> l = wiki.globalUsage("File:" + this.old_name);
-            button.setEnabled(true);
+            ArrayList<Tuple<String, String>> l = commonsWiki.globalUsage("File:" + this.old_name);
+            BUTTON.setEnabled(true);
             if (l == null || l.size() == 0) {
-                bar.setString(String.format("'%s' is not globally used", this.old_name));
+                BAR.setString(String.format("'%s' is not globally used", this.old_name));
             } else {
-                bar.setMaximum(l.size());
+                BAR.setMaximum(l.size());
                 String domain = null;
                 String text = null;
                 for (int i = 0; i < l.size(); ++i) {
@@ -139,15 +150,15 @@ public class GlobalReplace {
                     }
                     if (domain != l.get((int)i).y) {
                         domain = (String)l.get((int)i).y;
-                        wiki.switchDomain(domain);
+                        commonsWiki.switchDomain(domain);
                     }
-                    if ((text = wiki.getPageText((String)l.get((int)i).x)) == null) continue;
+                    if ((text = commonsWiki.getPageText((String)l.get((int)i).x)) == null) continue;
                     Object[] arrobject = new Object[2];
                     arrobject[0] = domain.contains((CharSequence)"commons") ? "" : "Commons:";
-                    arrobject[1] = "GlobalReplace v0.3";
-                    wiki.edit((String)l.get((int)i).x, text.replaceAll(this.regex, this.new_name), String.format(this.reason, arrobject));
+                    arrobject[1] = TITLE;
+                    commonsWiki.edit((String)l.get((int)i).x, text.replaceAll(this.regex, this.new_name), String.format(this.reason, arrobject));
                 }
-                bar.setString("Done!");
+                BAR.setString("Done!");
             }
             this.setTextFieldState(true);
             GlobalReplace.negateActivated();
@@ -155,21 +166,21 @@ public class GlobalReplace {
 
         private boolean updateStatus(int i, Tuple<String, String> t) {
             if (!activated) {
-                bar.setValue(0);
-                bar.setString("Interrupted by user");
+                BAR.setValue(0);
+                BAR.setString("Interrupted by user");
                 this.setTextFieldState(true);
-                button.setEnabled(true);
+                BUTTON.setEnabled(true);
                 return false;
             }
-            bar.setValue(i + 1);
-            bar.setString(String.format("Edit %s @ %s (%d/%d)", t.x, t.y, i + 1, bar.getMaximum()));
+            BAR.setValue(i + 1);
+            BAR.setString(String.format("Edit %s @ %s (%d/%d)", t.x, t.y, i + 1, BAR.getMaximum()));
             return true;
         }
 
         private void setTextFieldState(boolean editable) {
-            old_tf.setEditable(editable);
-            new_tf.setEditable(editable);
-            r_tf.setEditable(editable);
+            OLD_TF.setEditable(editable);
+            NEW_TF.setEditable(editable);
+            REASON_TF.setEditable(editable);
         }
 
         private void makeRegex() {

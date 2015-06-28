@@ -8,12 +8,13 @@ import fbot.lib.mbot.MBot;
 import fbot.lib.util.FError;
 import fbot.lib.util.FSystem;
 import fbot.lib.util.ReadFile;
+
 import java.io.File;
 import java.util.HashMap;
 
 public class WikiGen {
     private static final HashMap<String, String> px = WikiGen.genX();
-    private static final HashMap<String, W> cache = new HashMap();
+    private static final HashMap<String, W> cache = new HashMap<String, W>();
 
     private WikiGen() {
     }
