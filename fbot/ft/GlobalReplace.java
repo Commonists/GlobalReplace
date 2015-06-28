@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -81,14 +82,16 @@ public class GlobalReplace {
                 + (Byte.parseByte(minVersion[1]) << 8)
                 + Byte.parseByte(minVersion[2]);
 
-        System.out.println(minimumVersion + " " + actualVersion);
         if (minimumVersion <= actualVersion)
             return;
 
-        JOptionPane.showMessageDialog(null,
-                "Please update the program to version " + versionText
-                        + " or higher. (Current version: " + VERSION + ")"
-                        + "\n" + "Program will stop!", "Outdated version",
+        JTextArea msg = new JTextArea("Current version: " + VERSION + "\n"
+                + "Please update the program to version " + versionText
+                + " or higher:" + "\n"
+                + "https://github.com/Commonists/GlobalReplace/releases/latest"
+                + "\n" + "Program will stop!");
+        msg.setFocusable(true);
+        JOptionPane.showMessageDialog(null, msg, "Outdated version",
                 JOptionPane.ERROR_MESSAGE);
         System.exit(0);
     }
