@@ -4,17 +4,17 @@
 package fbot.lib.core;
 
 import fbot.lib.core.Tools;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class URLBuilder {
     private String domain;
     private String base;
     private String action;
-    private HashMap<String, String> pl = new HashMap();
+    private HashMap<String, String> params = new HashMap<String, String>();
 
     public URLBuilder(String domain) {
         this.setDomain(domain);
@@ -29,22 +29,30 @@ public class URLBuilder {
         this.base = String.format("https://%s/w/api.php?format=json&action=", domain);
     }
 
+    /**
+     * Set the action of this URLBuilder
+     * @param action the action to set
+     */
     public void setAction(String action) {
         this.action = action;
     }
 
-    public /* varargs */ void setParams(String ... params) {
+    /**
+     * Put the given params in the params HashMap with the ith element being the key and the (i+1)th element being the value 
+     * @param params
+     */
+    public void setParams(String ... params) {
         if (params.length % 2 == 1) {
             throw new UnsupportedOperationException("params cannot be odd # of elements: " + params.length);
         }
         for (int i = 0; i < params.length; i+=2) {
-            this.pl.put(params[i], params[i + 1]);
+            this.params.put(params[i], params[i + 1]);
         }
     }
 
     public URL makeURL() {
         try {
-            return new URL(String.valueOf(this.base) + this.action + URLBuilder.chainParams(this.getParamsAsList()));
+            return new URL( this.base  + this.action + URLBuilder.chainParams(this.getParamsAsList()));
         }
         catch (Throwable e) {
             e.printStackTrace();
@@ -54,7 +62,7 @@ public class URLBuilder {
 
     public String[] getParamsAsList() {
         ArrayList<String> hold = new ArrayList<String>();
-        for (Map.Entry<String, String> e : this.pl.entrySet()) {
+        for (Map.Entry<String, String> e : this.params.entrySet()) {
             hold.add(e.getKey());
             hold.add(e.getValue());
         }
@@ -66,7 +74,7 @@ public class URLBuilder {
     }
 
     public void clearParams() {
-        this.pl = new HashMap();
+        this.params = new HashMap<String, String>();
     }
 
     public void clearAction() {
@@ -84,7 +92,7 @@ public class URLBuilder {
         }
         String x = "";
         for (int i = 0; i < params.length; i+=2) {
-            x = String.valueOf(x) + String.format("&%s=%s", params[i], params[i + 1]);
+            x = x + String.format("&%s=%s", params[i], params[i + 1]);
         }
         return x;
     }
