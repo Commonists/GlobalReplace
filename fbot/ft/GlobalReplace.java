@@ -92,9 +92,11 @@ public class GlobalReplace {
         if (text == null) {
             return;
         }
-        if (!text.contains(wiki.whoami())) {
-            boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#~~~~",
-                    "Signing up via " + TITLE);
+        final String user = "[[User:" + wiki.whoami() + "|" + wiki.whoami()
+                + "]]";
+        if (!text.contains(user)) {
+            boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#" + user
+                    + " {{subst:#time:d F Y}}", "Signing up via " + TITLE);
             if (!success) {
                 JOptionPane.showConfirmDialog(null,
                         "You are not allowed to use this tool; Please request permission at "
@@ -200,8 +202,8 @@ public class GlobalReplace {
                 // create new log page
                 logPageText = "A list of all replacements done by " + "[[User:"
                         + wiki.whoami() + "|" + wiki.whoami() + "]] in "
-                        + "{{subst:#time: F Y}}" + " using " + "[[" + COMMONS_PAGE
-                        + "|" + NAME + "]].\n"
+                        + "{{subst:#time: F Y}}" + " using " + "[["
+                        + COMMONS_PAGE + "|" + NAME + "]].\n"
                         + "[[Category:GlobalReplace Logs in " + currentYear
                         + "]]" + "\n";
             }
