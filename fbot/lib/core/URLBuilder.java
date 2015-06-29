@@ -26,7 +26,7 @@ public class URLBuilder {
 
     public void setDomain(String domain) {
         this.domain = domain;
-        this.base = String.format("https://%s/w/api.php?format=json&action=", domain);
+        this.base = String.format("https://%s/w/api.php?rawcontinue=&format=json&action=", domain);
     }
 
     /**
