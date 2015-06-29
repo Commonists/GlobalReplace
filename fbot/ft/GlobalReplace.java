@@ -27,7 +27,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 5, 0 };// {X},{fix},{minor}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 5, 1 };// {X},{fix},{minor}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -131,8 +131,11 @@ public class GlobalReplace {
         if (text == null) {
             return;
         }
-        final String user = "[[User:" + wiki.whoami() + "|" + wiki.whoami()
-                + "]]";
+        final String userName = Character.toString(wiki.whoami().charAt(0))
+            .toUpperCase()
+            + wiki.whoami().substring(1);
+        final String user = "[[User:" + userName + "|" + userName
+            + "]]";
         if (!text.contains(user)) {
             boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#" + user
                     + " {{subst:#time:d F Y}}", "Signing up via " + TITLE);
