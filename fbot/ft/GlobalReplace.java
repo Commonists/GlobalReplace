@@ -27,7 +27,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 5, 0 };// {X},{fix},{minor}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 0 };// {X},{fix},{minor}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -135,11 +135,11 @@ public class GlobalReplace {
                 + "]]";
         if (!text.contains(user)) {
             boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#" + user
-                    + " {{subst:#time:d F Y}}", "Signing up via " + TITLE);
+                    + ", {{subst:#time:d F Y}}", "Signing up via " + TITLE);
             if (!success) {
                 JOptionPane.showConfirmDialog(null,
                         "You are not allowed to use this tool; Please request permission at "
-                                + SIGN_UP + ".  Program exiting",
+                                + SIGN_UP + ".\nProgram exiting",
                         "Missing permission", JOptionPane.OK_CANCEL_OPTION);
                 System.exit(0);
             }
