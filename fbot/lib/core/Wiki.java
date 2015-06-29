@@ -38,7 +38,7 @@ public class Wiki {
     /**
      * Return the user name of the currently logged in user
      * 
-     * @return
+     * @return the user name with no namespace prefix
      */
     public String whoami() {
         return this.settings.user;

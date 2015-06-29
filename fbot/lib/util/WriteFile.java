@@ -49,7 +49,7 @@ public class WriteFile {
                 return;
             }
             FileOutputStream out = new FileOutputStream(this.f, true);
-            out.write(this.b); // TODO int or byte?
+            out.write(this.b);
             out.close();
         } else if (this.overwrite) {
             PrintStream p = new PrintStream(this.f, FSystem.getDefaultCharset());

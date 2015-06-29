@@ -131,9 +131,11 @@ public class GlobalReplace {
         if (text == null) {
             return;
         }
-        if (!text.contains(wiki.whoami())) {
-            boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#~~~~",
-                    "Signing up via " + TITLE);
+        final String user = "[[User:" + wiki.whoami() + "|" + wiki.whoami()
+                + "]]";
+        if (!text.contains(user)) {
+            boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#" + user
+                    + " {{subst:#time:d F Y}}", "Signing up via " + TITLE);
             if (!success) {
                 JOptionPane.showConfirmDialog(null,
                         "You are not allowed to use this tool; Please request permission at "
