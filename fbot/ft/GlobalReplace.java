@@ -27,7 +27,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 0 };// {X},{fix},{minor}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 1 };// {X},{fix},{minor}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -67,10 +67,7 @@ public class GlobalReplace {
     private static void checkVersion() {
         String versionText = wiki.getPageText(COMMONS_PAGE + "/MinimumVersion");
         if (versionText == null) {
-            JOptionPane.showMessageDialog(null,
-                    "Could not check for updates. Program will stop!",
-                    "Update check failed", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            exitWithWaring("Could not check for updates", "Update check failed");
         }
 
         String[] minVersion = versionText.substring(1).split("\\.", 3);
@@ -89,11 +86,9 @@ public class GlobalReplace {
                 + "Please update the program to version " + versionText
                 + " or higher:" + "\n"
                 + "https://github.com/Commonists/GlobalReplace/releases/latest"
-                + "\n" + "Program will stop!");
+                + "\nProgram will stop!");
         msg.setFocusable(true);
-        JOptionPane.showMessageDialog(null, msg, "Outdated version",
-                JOptionPane.ERROR_MESSAGE);
-        System.exit(0);
+        exitWithWaring(msg, "Outdated version");
     }
 
     private static void createAndShowGUI() {
@@ -129,7 +124,7 @@ public class GlobalReplace {
     private static void signup() {
         String text = wiki.getPageText(SIGN_UP);
         if (text == null) {
-            return;
+            exitWithWaring("Could not sign up at " + SIGN_UP, "Sign up error");
         }
         final String user = "[[User:" + wiki.whoami() + "|" + wiki.whoami()
                 + "]]";
@@ -137,13 +132,29 @@ public class GlobalReplace {
             boolean success = wiki.edit(SIGN_UP, text.trim() + "\n#" + user
                     + ", {{subst:#time:d F Y}}", "Signing up via " + TITLE);
             if (!success) {
-                JOptionPane.showConfirmDialog(null,
+                exitWithWaring(
                         "You are not allowed to use this tool; Please request permission at "
-                                + SIGN_UP + ".\nProgram exiting",
-                        "Missing permission", JOptionPane.OK_CANCEL_OPTION);
-                System.exit(0);
+                                + SIGN_UP, "Missing permission");
             }
         }
+    }
+
+    /**
+     * Shut down this program after warning the user.
+     * 
+     * @param message
+     *            the message to display; Only if this object is instance of
+     *            String, "Program will stop" will be appended
+     * @param title
+     *            the title of the message dialog
+     */
+    private static void exitWithWaring(Object message, String title) {
+        if (message instanceof String) {
+            message = (String) message + ".\nProgram will stop!";
+        }
+        JOptionPane.showMessageDialog(null, message, title,
+                JOptionPane.ERROR_MESSAGE);
+        System.exit(0);
     }
 
     private static synchronized void negateActivated() {
