@@ -5,6 +5,10 @@ Replaces file usage globally in the Wikimedia Wikifarm.
 This java program requires a minimum version of Java 6 installed. Consult [the wiki page](https://commons.wikimedia.org/wiki/Commons:GlobalReplace) for further instructions.
 
 ## Compile
-Download the precompiled jar file or build it yourself after downloading the source with a simple
+[Download the precompiled jar file](https://github.com/Commonists/GlobalReplace/releases) or build it yourself after downloading the source with a simple
 
-```ant```
+```
+ant
+```
+
+You need [Apache Ant](http://ant.apache.org) installed.
