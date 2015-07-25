@@ -7,4 +7,4 @@ This java program requires a minimum version of Java 6 installed. Consult [the w
 ## Compile
 Download the precompiled jar file or build it yourself after downloading the source with a simple
 
-```make all```
+```ant```

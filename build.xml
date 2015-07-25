@@ -1,0 +1,22 @@
+<project default="global-replace_jar" name="Create Runnable Jar for Project GlobalReplace">
+	<property name="dir.src" value="fbot" />
+	<property name="dir.src.json" value="org" />
+	<property name="dir.build" value="ant_build" />
+
+	<target name="compile">
+		<delete dir="${dir.build}" />
+		<mkdir dir="${dir.build}" />
+		<javac srcdir="${dir.src.json}" destdir="${dir.build}" />
+		<javac srcdir="${dir.src}" destdir="${dir.build}" />
+	</target>
+	<target name="global-replace_jar" depends="compile">
+		<jar destfile="globalreplace.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="fbot.ft.GlobalReplace" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="${dir.build}" />
+		</jar>
+		<echo message="Done!" />
+	</target>
+</project>
