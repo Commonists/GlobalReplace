@@ -15,9 +15,10 @@ public class Wiki {
     }
 
     public Wiki(String user, String px, String domain) {
-        // first char is upper case usually
+        // TODO use proper normalize
         user = Character.toString(user.charAt(0)).toUpperCase()
                 + user.substring(1);
+        user = user.replace('_', ' ');
         this.settings = new Credentials(user, px);
         this.settings.setTo(domain);
     }
