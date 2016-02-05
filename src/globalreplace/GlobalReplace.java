@@ -1,18 +1,16 @@
 /*
  * Decompiled with CFR 0_101.
  */
-package fbot.ft;
+package globalreplace;
 
-import fbot.lib.core.Namespace;
-import fbot.lib.core.WMFWiki;
-import fbot.lib.core.auxi.Tuple;
-import fbot.lib.util.FGUI;
-import fbot.lib.util.FFile;
+import jwiki.core.Wiki;
+import jwiki.util.FL;
+import jwiki.util.Tuple;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import javax.security.auth.login.LoginException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,11 +21,11 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class GlobalReplace {
-    private static WMFWiki wiki;
+    private static Wiki wiki;
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 2 };// {X},{fix},{minor}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 3 };// {X},{fix},{minor}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -48,17 +46,12 @@ public class GlobalReplace {
         activated = false;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws LoginException {
         wiki = FGUI.login();
         GlobalReplace.checkVersion();
         GlobalReplace.signup();
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                GlobalReplace.createAndShowGUI();
-            }
-        });
+        
+        SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 
     /**
@@ -98,13 +91,7 @@ public class GlobalReplace {
         REASON_TF.setToolTipText("Enter an optional edit summary");
         BAR.setStringPainted(true);
         BAR.setString(String.format("Hello, %s! :)", wiki.whoami()));
-        BUTTON.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                new Thread(new GRThread()).start();
-            }
-        });
+        BUTTON.addActionListener(e -> new Thread(new GRThread()).start());
 
         // Create GUI
         JFrame f = FGUI.simpleJFrame(TITLE, 3, true);
@@ -171,8 +158,8 @@ public class GlobalReplace {
                 "+", ".", "<", ">" };
 
         private GRThread() {
-            this.old_name = Namespace.nss(OLD_TF.getText()).trim();
-            this.new_name = Namespace.nss(NEW_TF.getText()).trim();
+            this.old_name = wiki.nss(OLD_TF.getText()).trim();
+            this.new_name = wiki.nss(NEW_TF.getText()).trim();
             this.reason = REASON_TF.getText().trim().replace("%s", "%%s")
                     + " ([[%s" + COMMONS_PAGE + "|%s]])";
             this.makeRegex();
@@ -187,7 +174,7 @@ public class GlobalReplace {
                 BUTTON.setText("Stop");
                 GlobalReplace.negateActivated();
                 this.doJob();
-                wiki.switchDomain("commons.wikimedia.org");
+                wiki.getWiki("commons.wikimedia.org");
                 BUTTON.setText("Start");
             } else {
                 BUTTON.setEnabled(false);
@@ -199,8 +186,8 @@ public class GlobalReplace {
             BAR.setValue(0);
             BUTTON.setEnabled(false);
             this.setTextFieldState(false);
-            ArrayList<Tuple<String, String>> list = wiki.globalUsage("File:"
-                    + this.old_name);
+            ArrayList<Tuple<String, String>> list = FL.mapToList(wiki.globalUsage("File:"
+                    + this.old_name));
             BUTTON.setEnabled(true);
             if (list == null || list.size() == 0) {
                 BAR.setString(String.format("'%s' is not globally used",
@@ -216,7 +203,7 @@ public class GlobalReplace {
                     }
                     if (domain != list.get(i).y) {
                         domain = list.get(i).y;
-                        wiki.switchDomain(domain);
+                        wiki.getWiki(domain);
                     }
                     if ((text = wiki.getPageText(list.get(i).x)) == null)
                         continue;
@@ -242,8 +229,10 @@ public class GlobalReplace {
          *            the size of the replacement
          */
         private void logReplacement(int size) {
-            String currentYearAndMonth = wiki
-                    .expandtemplates("{{CURRENTYEAR}}/{{CURRENTMONTH}}");
+      	  
+      	  LocalDateTime now = LocalDateTime.now();
+      	  
+            String currentYearAndMonth = String.format("%d/%d", now.getYear(), now.getMonthValue()); 
             String currentYear = currentYearAndMonth.split("/", 2)[0];
             String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
                     + currentYearAndMonth;
@@ -313,15 +302,23 @@ public class GlobalReplace {
          * @return if the names are valid
          */
         private boolean sanityCheck() {
-            boolean status = FFile.hasAllowedFileExtension(this.old_name)
-                    && FFile.hasAllowedFileExtension(this.new_name);
+            boolean status = hasAllowedFileExtension(this.old_name)
+                    && hasAllowedFileExtension(this.new_name);
             if (!status) {
                 JOptionPane.showMessageDialog(null,
                         "You can only replace valid file names");
             }
             return status;
         }
-
+        
+        /**
+         * Determines whether a file is eligible for upload on WMF wikis.
+         * @param fn The file name to check.
+         * @return True if the file can be uploaded to WMF wikis.
+         */
+        private static boolean hasAllowedFileExtension(String fn)
+        {
+      	  return fn.matches("(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)");
+        }
     }
-
 }
