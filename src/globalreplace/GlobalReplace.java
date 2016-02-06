@@ -50,7 +50,7 @@ public class GlobalReplace {
         wiki = FGUI.login();
         GlobalReplace.checkVersion();
         GlobalReplace.signup();
-        
+
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 
@@ -229,10 +229,11 @@ public class GlobalReplace {
          *            the size of the replacement
          */
         private void logReplacement(int size) {
-      	  
-      	  LocalDateTime now = LocalDateTime.now();
-      	  
-            String currentYearAndMonth = String.format("%d/%d", now.getYear(), now.getMonthValue()); 
+
+            LocalDateTime now = LocalDateTime.now();
+
+            String currentYearAndMonth = String.format("%d/%d", now.getYear(),
+                    now.getMonthValue());
             String currentYear = currentYearAndMonth.split("/", 2)[0];
             String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
                     + currentYearAndMonth;
@@ -302,6 +303,7 @@ public class GlobalReplace {
          * @return if the names are valid
          */
         private boolean sanityCheck() {
+
             boolean status = hasAllowedFileExtension(this.old_name)
                     && hasAllowedFileExtension(this.new_name);
             if (!status) {
@@ -310,15 +312,17 @@ public class GlobalReplace {
             }
             return status;
         }
-        
+
         /**
          * Determines whether a file is eligible for upload on WMF wikis.
-         * @param fn The file name to check.
+         * 
+         * @param fn
+         *            The file name to check.
          * @return True if the file can be uploaded to WMF wikis.
          */
-        private static boolean hasAllowedFileExtension(String fn)
-        {
-      	  return fn.matches("(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)");
+        private static boolean hasAllowedFileExtension(String fn) {
+            final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)";
+            return fn.matches(ALLOWED_FILE_TYPES);
         }
     }
 }
