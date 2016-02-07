@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0_101.
- */
 package globalreplace;
 
 import jwiki.core.Wiki;
@@ -25,7 +22,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 3 };// {X},{fix},{minor}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 4 };// {major},{minor},{fix}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -174,7 +171,7 @@ public class GlobalReplace {
                 BUTTON.setText("Stop");
                 GlobalReplace.negateActivated();
                 this.doJob();
-                wiki.getWiki("commons.wikimedia.org");
+                wiki = wiki.getWiki("commons.wikimedia.org");
                 BUTTON.setText("Start");
             } else {
                 BUTTON.setEnabled(false);
@@ -203,7 +200,7 @@ public class GlobalReplace {
                     }
                     if (domain != list.get(i).y) {
                         domain = list.get(i).y;
-                        wiki.getWiki(domain);
+                        wiki = wiki.getWiki(domain);
                     }
                     if ((text = wiki.getPageText(list.get(i).x)) == null)
                         continue;
