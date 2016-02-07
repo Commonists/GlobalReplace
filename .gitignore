@@ -1,4 +1,6 @@
 /bin
+/ant_build
+globalreplace.jar
 
 # OS Generated files
 .DS_Store
