@@ -1,11 +1,9 @@
 package globalreplace;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.security.auth.login.LoginException;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -14,9 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JProgressBar;
 import javax.swing.JTextField;
-import javax.swing.text.JTextComponent;
 
 import jwiki.core.Wiki;
 
@@ -86,21 +82,6 @@ public class FGUI
 	}
 
 	/**
-	 * Wraps a text component in a border.
-	 * @param x The text component to wrap
-	 * @param title The title to use
-	 * @return A JPanel with a border containing the text component.
-	 */
-	public static JPanel borderTitleWrap(JTextComponent x, String title)
-	{
-		JPanel p = new JPanel(new BorderLayout());
-		borderTitleWrap(p, title);
-		
-		p.add(x, BorderLayout.CENTER);
-		return p;
-	}
-	
-	/**
 	 * Wraps a component in a border. 
 	 * @param p The component to wrap 
 	 * @param title The title to assign to the border.
@@ -143,16 +124,6 @@ public class FGUI
 		}
 		showErrorAndExit("Failed login 3 times.  Program exiting", 0);
 		return null; // never reaches here - shut up compiler
-	}
-
-	/**
-	 * Provides GUI login to Wikimedia Commons. Automatically terminates program after 3 failed logins.
-	 *
-	 * @return A Wiki object created by logging in.
-	 */
-	public static Wiki login() throws LoginException
-	{
-		return login("commons.wikimedia.org");
 	}
 	
 	/**
@@ -216,38 +187,6 @@ public class FGUI
 	}
 	
 	/**
-	 * Merges two components into a JPanel with BorderLayout.
-	 * @param top The component to go on top (NORTH)
-	 * @param bottom The component to go on bottom (SOUTH)
-	 * @return The new JPanel.
-	 */
-	public static JPanel topBottomBorderMerge(JComponent top, JComponent bottom)
-	{
-		JPanel p = new JPanel(new BorderLayout());
-		p.add(top, BorderLayout.NORTH);
-		p.add(bottom, BorderLayout.SOUTH);
-		
-		return p;
-	}
-	
-	/**
-	 * Makes a progress bar with a painted string.  Min set to 0, Max set to 100.
-	 * @param initial A string to display on the JProgressBar.  Set to null to disable.  
-	 * @return The JProgressBar
-	 */
-	public static JProgressBar makePB(String initial)
-	{
-		JProgressBar b = new JProgressBar(0, 100);
-		b.setStringPainted(true);
-		
-		if(initial != null)
-			b.setString(initial);
-		
-		return b;
-	}
-	
-	
-	/**
 	 * Shows error as Messagebox and exits.
 	 * 
 	 * @param s The error message
@@ -257,26 +196,5 @@ public class FGUI
 	{
 		JOptionPane.showMessageDialog(null, s);
 		System.exit(err);
-	}
-	
-	
-	/**
-	 * Checks if a text component is empty, ignoring whitespace
-	 * @param tc The text component to check
-	 * @return True if the text component is empty
-	 */
-	public static boolean tcIsEmpty(JTextComponent tc)
-	{
-		return getTCText(tc).isEmpty();
-	}
-	
-	/**
-	 * Gets the text of a text component. Removes leading and trailing whitespace.
-	 * @param tc The text component to fetch text from
-	 * @return The text of the text component.
-	 */
-	public static String getTCText(JTextComponent tc)
-	{
-		return tc.getText().trim();
 	}
 }
