@@ -44,9 +44,9 @@ public class GlobalReplace {
     }
 
     public static void main(String[] args) throws LoginException {
-        wiki = FGUI.login();
-        GlobalReplace.checkVersion();
-        GlobalReplace.signup();
+        wiki = FGUI.login("commons.wikimedia.org");
+        checkVersion();
+        signup();
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
