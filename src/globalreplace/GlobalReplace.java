@@ -87,7 +87,7 @@ public class GlobalReplace {
         NEW_TF.setToolTipText("Use Ctrl+v or Command+v to paste text");
         REASON_TF.setToolTipText("Enter an optional edit summary");
         BAR.setStringPainted(true);
-        BAR.setString(String.format("Hello, %s! :)", wiki.whoami()));
+        BAR.setString(String.format("Hello, %s! :-)", wiki.whoami()));
         BUTTON.addActionListener(e -> new Thread(new GRThread()).start());
 
         // Create GUI
@@ -318,7 +318,7 @@ public class GlobalReplace {
          * @return True if the file can be uploaded to WMF wikis.
          */
         private static boolean hasAllowedFileExtension(String fn) {
-            final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|tiff|tif|pdf|webm|flac|wav)";
+            final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|djv|tiff|tif|pdf|webm|flac|wav)";
             return fn.matches(ALLOWED_FILE_TYPES);
         }
     }
