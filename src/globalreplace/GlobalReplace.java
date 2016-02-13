@@ -312,13 +312,14 @@ public class GlobalReplace {
 
         /**
          * Determines whether a file is eligible for upload on WMF wikis.
+         * See https://commons.wikimedia.org/wiki/Special:MediaStatistics
          * 
          * @param fn
          *            The file name to check.
          * @return True if the file can be uploaded to WMF wikis.
          */
         private static boolean hasAllowedFileExtension(String fn) {
-            final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|djv|tiff|tif|pdf|webm|flac|wav)";
+            final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|djv|tiff|tif|pdf|webm|flac|wav|opus)";
             return fn.matches(ALLOWED_FILE_TYPES);
         }
     }
