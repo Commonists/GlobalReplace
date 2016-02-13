@@ -1,6 +1,8 @@
 /bin
 /ant_build
+/launch4j
 globalreplace.jar
+globalreplace.exe
 
 # OS Generated files
 .DS_Store
