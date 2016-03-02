@@ -1,5 +1,6 @@
 package globalreplace;
 
+import jwiki.core.ColorLog;
 import jwiki.core.Wiki;
 import jwiki.util.FL;
 import jwiki.util.Tuple;
@@ -202,8 +203,11 @@ public class GlobalReplace {
                         domain = list.get(i).y;
                         wiki = wiki.getWiki(domain);
                     }
-                    if ((text = wiki.getPageText(list.get(i).x)) == null)
+                    text = wiki.getPageText(list.get(i).x);
+                    if (text == null) {
+                        ColorLog.warn("Could not find text of " + list.get(i).x);
                         continue;
+                    }
                     Object[] arrobject = new Object[2];
                     arrobject[0] = domain.contains("commons") ? "" : "Commons:";
                     arrobject[1] = TITLE;
@@ -271,7 +275,7 @@ public class GlobalReplace {
             }
             BAR.setValue(progress);
             BAR.setString(String.format("Edit %s @ %s (%d/%d)", tuple.x,
-                    tuple.y, progress + 1, BAR.getMaximum()));
+                    tuple.y, progress, BAR.getMaximum()));
             return true;
         }
 
