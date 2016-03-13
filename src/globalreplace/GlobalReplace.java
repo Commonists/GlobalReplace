@@ -32,6 +32,7 @@ public class GlobalReplace {
     private static final JTextField REASON_TF;
     private static final JProgressBar BAR;
     private static final JButton BUTTON;
+    public static final boolean USING_CAPTIAL_LINKS = true;
 
     private static boolean activated;
 
@@ -157,6 +158,9 @@ public class GlobalReplace {
 
         private GRThread() {
             this.old_name = wiki.nss(OLD_TF.getText()).trim();
+            this.old_name = this.old_name.replaceAll("_", " ");
+            if(USING_CAPTIAL_LINKS)
+                this.old_name = firstCharToUpperCase(this.old_name);
             this.new_name = wiki.nss(NEW_TF.getText()).trim();
             this.reason = REASON_TF.getText().trim().replace("%s", "%%s")
                     + " ([[%s" + COMMONS_PAGE + "|%s]])";
@@ -296,6 +300,13 @@ public class GlobalReplace {
             }
             this.old_name_regex = this.old_name_regex.replaceAll("( |_)",
                     "( |_)");
+            if(!USING_CAPTIAL_LINKS)
+                return;
+            char char0 = this.old_name_regex.charAt(0);
+            if (Character.toUpperCase(char0) != Character.toLowerCase(char0))
+                this.old_name_regex = "(" + Character.toLowerCase(char0) + "|"
+                        + Character.toUpperCase(char0) + ")"
+                        + this.old_name_regex.substring(1);
         }
 
         /**
@@ -326,5 +337,18 @@ public class GlobalReplace {
             final String ALLOWED_FILE_TYPES = "(?i).+?\\.(png|gif|jpg|jpeg|xcf|mid|ogg|ogv|oga|svg|djvu|djv|tiff|tif|pdf|webm|flac|wav|opus)";
             return fn.matches(ALLOWED_FILE_TYPES);
         }
+    }
+
+    /**
+     * Make the first char of the string upper-case
+     * 
+     * @param string
+     *            The string to be tackled
+     * @return The string with the first char upper-cased
+     */
+    public static String firstCharToUpperCase(String string) {
+        if (string == null || string.equals(""))
+            return string;
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
     }
 }
