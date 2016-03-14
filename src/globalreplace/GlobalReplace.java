@@ -58,7 +58,7 @@ public class GlobalReplace {
      */
     private static void checkVersion() {
         String versionText = wiki.getPageText(COMMONS_PAGE + "/MinimumVersion");
-        if (versionText == null) {
+        if (versionText == null || versionText.equals("")) {
             exitWithWaring("Could not check for updates", "Update check failed");
         }
 
@@ -109,7 +109,7 @@ public class GlobalReplace {
      */
     private static void signup() {
         String text = wiki.getPageText(SIGN_UP);
-        if (text == null) {
+        if (text == null || text.equals("")) {
             exitWithWaring("Could not sign up at " + SIGN_UP, "Sign up error");
         }
         final String user = "[[User:" + wiki.whoami() + "|" + wiki.whoami()
@@ -209,7 +209,7 @@ public class GlobalReplace {
                     }
                     // TODO Remove temporary replace-workaround after jwiki fix
                     text = wiki.getPageText(list.get(i).x.replaceAll("_", " "));
-                    if (text == null) {
+                    if (text == null || text.equals("")) {
                         ColorLog.warn("Could not find text of " + list.get(i).x);
                         System.exit(-1);
                     }
@@ -244,7 +244,7 @@ public class GlobalReplace {
             String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
                     + currentYearAndMonth;
             String logPageText = wiki.getPageText(logPage);
-            if (logPageText == null) {
+            if (logPageText == null || logPageText.equals("")) {
                 // create new log page
                 logPageText = "A list of all replacements done by " + "[[User:"
                         + wiki.whoami() + "|" + wiki.whoami() + "]] in "
