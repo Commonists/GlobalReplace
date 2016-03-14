@@ -207,10 +207,11 @@ public class GlobalReplace {
                         domain = list.get(i).y;
                         wiki = wiki.getWiki(domain);
                     }
-                    text = wiki.getPageText(list.get(i).x);
+                    // TODO Remove temporary replace-workaround after jwiki fix
+                    text = wiki.getPageText(list.get(i).x.replaceAll("_", " "));
                     if (text == null) {
                         ColorLog.warn("Could not find text of " + list.get(i).x);
-                        continue;
+                        System.exit(-1);
                     }
                     Object[] arrobject = new Object[2];
                     arrobject[0] = domain.contains("commons") ? "" : "Commons:";
