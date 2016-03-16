@@ -23,7 +23,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 4 };// {major},{minor},{fix}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 5 };// {major},{minor},{fix}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -58,7 +58,7 @@ public class GlobalReplace {
      */
     private static void checkVersion() {
         String versionText = wiki.getPageText(COMMONS_PAGE + "/MinimumVersion");
-        if (versionText == null) {
+        if (versionText == null || versionText.equals("")) {
             exitWithWaring("Could not check for updates", "Update check failed");
         }
 
@@ -109,7 +109,7 @@ public class GlobalReplace {
      */
     private static void signup() {
         String text = wiki.getPageText(SIGN_UP);
-        if (text == null) {
+        if (text == null || text.equals("")) {
             exitWithWaring("Could not sign up at " + SIGN_UP, "Sign up error");
         }
         final String user = "[[User:" + wiki.whoami() + "|" + wiki.whoami()
@@ -207,10 +207,11 @@ public class GlobalReplace {
                         domain = list.get(i).y;
                         wiki = wiki.getWiki(domain);
                     }
-                    text = wiki.getPageText(list.get(i).x);
-                    if (text == null) {
+                    // TODO Remove temporary replace-workaround after jwiki fix
+                    text = wiki.getPageText(list.get(i).x.replaceAll("_", " "));
+                    if (text == null || text.equals("")) {
                         ColorLog.warn("Could not find text of " + list.get(i).x);
-                        continue;
+                        System.exit(-1);
                     }
                     Object[] arrobject = new Object[2];
                     arrobject[0] = domain.contains("commons") ? "" : "Commons:";
@@ -243,7 +244,7 @@ public class GlobalReplace {
             String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
                     + currentYearAndMonth;
             String logPageText = wiki.getPageText(logPage);
-            if (logPageText == null) {
+            if (logPageText == null || logPageText.equals("")) {
                 // create new log page
                 logPageText = "A list of all replacements done by " + "[[User:"
                         + wiki.whoami() + "|" + wiki.whoami() + "]] in "
