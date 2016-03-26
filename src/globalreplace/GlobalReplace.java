@@ -238,7 +238,7 @@ public class GlobalReplace {
 
             LocalDateTime now = LocalDateTime.now();
 
-            String currentYearAndMonth = String.format("%d/%d", now.getYear(),
+            String currentYearAndMonth = String.format("%d/%02d", now.getYear(),
                     now.getMonthValue());
             String currentYear = currentYearAndMonth.split("/", 2)[0];
             String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
