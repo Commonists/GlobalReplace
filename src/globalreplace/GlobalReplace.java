@@ -161,8 +161,8 @@ public class GlobalReplace {
             this.old_name = this.old_name.replaceAll("_", " ");
             if(USING_CAPTIAL_LINKS)
                 this.old_name = firstCharToUpperCase(this.old_name);
-            this.new_name = wiki.nss(NEW_TF.getText()).trim();
-            this.reason = REASON_TF.getText().trim().replace("%s", "%%s")
+            this.new_name = wiki.nss(NEW_TF.getText()).trim().replace("$", "\\$");
+            this.reason = REASON_TF.getText().trim().replace("%", "%%")
                     + " ([[%s" + COMMONS_PAGE + "|%s]])";
             this.makeRegex();
         }
@@ -238,7 +238,7 @@ public class GlobalReplace {
 
             LocalDateTime now = LocalDateTime.now();
 
-            String currentYearAndMonth = String.format("%d/%d", now.getYear(),
+            String currentYearAndMonth = String.format("%d/%02d", now.getYear(),
                     now.getMonthValue());
             String currentYear = currentYearAndMonth.split("/", 2)[0];
             String logPage = "User:" + wiki.whoami() + "/GlobalReplaceLog/"
