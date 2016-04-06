@@ -10,7 +10,7 @@
 		<mkdir dir="${dir.build}" />
 		<javac srcdir="${dir.src}" destdir="${dir.build}">
 			<classpath>
-				<pathelement path="lib/jwiki-v1.1.jar" />
+				<pathelement path="lib/jwiki-v1.2.jar" />
 			</classpath>
 		</javac>
 	</target>
@@ -22,7 +22,7 @@
 				<attribute name="Class-Path" value="." />
 			</manifest>
 			<fileset dir="${dir.build}" />
-			<zipfileset excludes="META-INF/*.SF,*.md" src="lib/jwiki-v1.1.jar" />
+			<zipfileset excludes="META-INF/*.SF,*.md" src="lib/jwiki-v1.2.jar" />
 		</jar>
 		<echo message="Created jar!" />
 	</target>
