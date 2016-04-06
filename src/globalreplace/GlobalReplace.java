@@ -2,7 +2,6 @@ package globalreplace;
 
 import jwiki.core.ColorLog;
 import jwiki.core.Wiki;
-import jwiki.util.FL;
 import jwiki.util.Tuple;
 
 import java.time.LocalDateTime;
@@ -188,8 +187,8 @@ public class GlobalReplace {
             BAR.setValue(0);
             BUTTON.setEnabled(false);
             this.setTextFieldState(false);
-            ArrayList<Tuple<String, String>> list = FL.mapToList(wiki.globalUsage("File:"
-                    + this.old_name));
+            ArrayList<Tuple<String, String>> list = wiki.globalUsage("File:"
+                    + this.old_name);
             BUTTON.setEnabled(true);
             if (list == null || list.size() == 0) {
                 BAR.setString(String.format("'%s' is not globally used",
