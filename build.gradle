@@ -1,0 +1,45 @@
+defaultTasks 'globalreplace_jar'
+
+def dir_src = "src/globalreplace"
+def dir_build = "ant_build"
+def dir_libs = "libs"
+def dir_dist = "ant_dist"
+def dir_launch4j = "launch4j"
+
+apply plugin:'java'
+repositories {
+    jcenter()
+}
+dependencies {
+    compile 'fastily:jwiki:1.2.1'
+}
+
+task copy_deps_for_ant(type: Copy) {
+    from configurations.compile
+    into dir_libs
+}
+
+task compile(dependsOn: copy_deps_for_ant) << {
+    delete dir_build
+    mkdir dir_build
+
+    ant.javac(srcdir: dir_src, classpath: dir_libs + "/jwiki-1.2.1.jar", destdir: dir_build)
+}
+
+task globalreplace_jar(dependsOn: compile) << {
+    ant.jar(destfile: dir_dist + "/globalreplace.jar", filesetmanifest: "mergewithoutmain"){
+     manifest {
+      delegate.attribute(name: "Main-Class", value: "globalreplace.GlobalReplace")
+      delegate.attribute(name: "Class-Path", value: ".")
+     }
+     fileset(dir: dir_build)
+     fileset(dir: dir_libs)
+    }
+    ant.echo("Jar file created.")
+}
+
+task dist(dependsOn: globalreplace_jar) << {
+		ant.taskdef( name: "launch4j", classname: "net.sf.launch4j.ant.Launch4jTask",  classpath: dir_launch4j + "/launch4j.jar:" + dir_launch4j + "/lib/xstream.jar")
+		ant.launch4j(configFile: dir_dist + "/launch4jconfig.xml")
+		ant.echo("Windows executable created.")
+}
