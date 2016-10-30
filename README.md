@@ -18,7 +18,7 @@ You need [Apache Ant](http://ant.apache.org) and Gradle installed.
 To also build the windows exe:
 
 ```
-ant dist
+gradle dist
 ```
 
 You need to download launch4j into the folder `./launch4j`.
