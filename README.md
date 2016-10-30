@@ -9,10 +9,10 @@ This java program requires a minimum version of Java 8 installed. Consult [the w
 [Download the precompiled jar file](https://github.com/Commonists/GlobalReplace/releases) or build it yourself after downloading the source with a simple
 
 ```
-ant
+gradle
 ```
 
-You need [Apache Ant](http://ant.apache.org) installed.
+You need [Apache Ant](http://ant.apache.org) and Gradle installed.
 
 ### Windows exe
 To also build the windows exe:

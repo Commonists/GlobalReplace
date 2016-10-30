@@ -1,9 +1,8 @@
 package globalreplace;
 
-import jwiki.core.ColorLog;
-import jwiki.core.Wiki;
-import jwiki.util.FL;
-import jwiki.util.Tuple;
+import fastily.jwiki.core.ColorLog;
+import fastily.jwiki.core.Wiki;
+import fastily.jwiki.util.Tuple;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class GlobalReplace {
     private static final String NAME = "GlobalReplace";
     private static final String COMMONS_PAGE = "Commons:" + NAME;
     private static final String SIGN_UP = COMMONS_PAGE + "/Sign-in";
-    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 5 };// {major},{minor},{fix}
+    private static final byte[] VERSION_NUM = new byte[] { 0, 6, 6 };// {major},{minor},{fix}
     private static final String VERSION = "v" + VERSION_NUM[0] + "."
             + VERSION_NUM[1] + "." + VERSION_NUM[2];
     private static final String TITLE = "GlobalReplace " + VERSION;
@@ -188,8 +187,8 @@ public class GlobalReplace {
             BAR.setValue(0);
             BUTTON.setEnabled(false);
             this.setTextFieldState(false);
-            ArrayList<Tuple<String, String>> list = FL.mapToList(wiki.globalUsage("File:"
-                    + this.old_name));
+            ArrayList<Tuple<String, String>> list = wiki.globalUsage("File:"
+                    + this.old_name);
             BUTTON.setEnabled(true);
             if (list == null || list.size() == 0) {
                 BAR.setString(String.format("'%s' is not globally used",

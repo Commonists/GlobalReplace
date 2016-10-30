@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import jwiki.core.Wiki;
+import fastily.jwiki.core.Wiki;
 
 /**
  * Static GUI factories to make building tools easier.
