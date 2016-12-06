@@ -108,7 +108,7 @@ public class FGUI
 		JTextField tf = new JTextField(12);
 		JPasswordField pf = new JPasswordField(12);
 
-		for (int i = 0; i < 3; i++)
+		while (true)
 		{
 			if (JOptionPane.showConfirmDialog(null, buildForm("Login", new JLabel("User: "), tf, new JLabel("Password: "), pf),
 					"Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) != JOptionPane.OK_OPTION)
@@ -119,11 +119,13 @@ public class FGUI
 			}
 			catch (Throwable e)
 			{
-				JOptionPane.showConfirmDialog(null, "User/Password not recognized. Try again?");
+				String reason = "Failed to login."; // TODO better reason
+				if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(null, reason + " Try again?"))
+					break;
 			}
 		}
-		showErrorAndExit("Failed login 3 times.  Program exiting", 0);
-		return null; // never reaches here - shut up compiler
+		System.exit(0);
+		return null;
 	}
 	
 	/**

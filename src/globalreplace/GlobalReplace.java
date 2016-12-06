@@ -217,7 +217,7 @@ public class GlobalReplace {
                     arrobject[1] = TITLE;
                     wiki.edit(
                             list.get(i).x,
-                            text.replaceAll(this.old_name_regex, this.new_name),
+                            text.replaceAll(this.old_name_regex, "$1" + this.new_name),
                             String.format(this.reason, arrobject));
                 }
                 BAR.setValue(list.size());
@@ -307,6 +307,9 @@ public class GlobalReplace {
                 this.old_name_regex = "(" + Character.toLowerCase(char0) + "|"
                         + Character.toUpperCase(char0) + ")"
                         + this.old_name_regex.substring(1);
+            // The regex must only match when a special char separates the file name from the previous text
+            String seperator = "(\n|\\[|\\]|\\||:)";
+            this.old_name_regex = seperator + this.old_name_regex;
         }
 
         /**
